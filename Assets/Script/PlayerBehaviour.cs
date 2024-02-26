@@ -5,18 +5,10 @@ using UnityEngine;
 public class PlayerBehaviour : MonoBehaviour
 {
 
-    // Class for the player object
-    public float speed = 10.0f;
-    public float jumpForce = 10.0f;
-    public float gravityModifier = 2.0f;
-    public bool isOnGround = true;
-    public float mouseSensitivityX = 1.0f;
-    public float mouseSensitivityY = 1.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        Physics.gravity *= gravityModifier;
 
     }
 
