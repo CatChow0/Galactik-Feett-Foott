@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
 {
-
+    public bool isOnGround = false;
 
     // Start is called before the first frame update
     void Start()
