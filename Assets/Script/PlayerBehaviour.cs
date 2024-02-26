@@ -18,9 +18,10 @@ public class PlayerBehaviour : MonoBehaviour
         float hor = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
         float mouseX = Input.GetAxis("Mouse X");
-        // float mouseY = Input.GetAxis("Mouse Y");
-        transform.Rotate(transform.up, angularSpeed * mouseX);
-        transform.position = transform.position + (transform.forward * moveSpeed * vert * Time.deltaTime) + (transform.right * moveSpeed * hor * Time.deltaTime);
+        //transform.Rotate(transform.up, angularSpeed * mouseX);
+        transform.Rotate(transform.up, angularSpeed * hor);
+        transform.position = transform.position + transform.forward * moveSpeed * vert * Time.deltaTime;
+        //transform.position = transform.position + (transform.forward * moveSpeed * vert * Time.deltaTime) + (transform.right * moveSpeed * hor * Time.deltaTime);
         Debug.DrawRay(transform.position, transform.forward * 20, Color.blue);
         Debug.DrawRay(transform.position, Vector3.forward * 20, Color.cyan);
     }
