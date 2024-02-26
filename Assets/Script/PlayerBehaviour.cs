@@ -5,17 +5,38 @@ using UnityEngine;
 public class PlayerBehaviour : MonoBehaviour
 {
     public bool isOnGround = false;
+    private CharacterController player_controller;
+    public float speed = 10.0f;
+
+    public float smoothTurn = 0.1f;
+
+    private Vector3 moveDirection = Vector3.zero;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        player_controller = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        float move_horizontal = Input.GetAxisRaw("Horizontal");
+        float move_vertical = Input.GetAxisRaw("Vertical");
 
+        moveDirection.x = move_horizontal;
+        moveDirection.z = move_vertical;
+        moveDirection.Normalize();
+
+        if (moveDirection.magnitude >= 0.1f)
+        {
+            float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref smoothTurn, 0.1f);
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+            Vector3 move = transform.forward * speed * Time.deltaTime;
+            player_controller.Move(move);
+        }
         
 
     }
