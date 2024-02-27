@@ -260,9 +260,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 125
+  maxSpeed: 100
+  maxSlowSpeed: 62.5
   angularSpeed: 0.85
   jumpForce: 2500
-  id: 0
+  jetpackForce: 50
+  id: 2
 --- !u!54 &5770299030298404532
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -6,8 +6,10 @@ using UnityEngine.SocialPlatforms.Impl;
 public class PlayerBehaviour1 : MonoBehaviour
 {
 
-    // Initialisation des variables changeables dans l'�diteur
+    // Initialisation des variables changeables dans l'editeur
     [SerializeField] private float moveSpeed;
+    [SerializeField] private float maxSpeed;
+    [SerializeField] private float maxSlowSpeed;
     [SerializeField] private float angularSpeed;
     [SerializeField] private float jumpForce;
     [SerializeField] private float jetpackForce;
@@ -15,8 +17,8 @@ public class PlayerBehaviour1 : MonoBehaviour
 
     // Initialisation des variables
     private Rigidbody rb;
-    float hor, vert;
-    bool jump, jetpack, jumpAllow;
+    float hor, vert, currentSpeed;
+    bool slow, jump, jetpack, jumpAllow;
 
     private void Awake()
     {
@@ -39,6 +41,7 @@ public class PlayerBehaviour1 : MonoBehaviour
             vert = Input.GetAxis("Vertical");
             jump = Input.GetButtonDown("Jump");
             jetpack = Input.GetButton("Fire1");
+            slow = Input.GetButton("Slow1");
         }
         else if (id == 2)
         {
@@ -46,6 +49,7 @@ public class PlayerBehaviour1 : MonoBehaviour
             vert = Input.GetAxis("Vertical2");
             jump = Input.GetButtonDown("Jump2");
             jetpack = Input.GetButton("Fire2");
+            slow = Input.GetButton("Slow2");
         }
 
         if (jump && jumpAllow)
@@ -69,16 +73,43 @@ public class PlayerBehaviour1 : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Deplacement du joueur
-        rb.AddForce(transform.forward * moveSpeed * vert);
+        // Deplacement du joueur en marchant/slow
+        if (slow)
+        {
+            currentSpeed = moveSpeed * vert;
+            if (currentSpeed >= maxSlowSpeed)
+            {
+                //Debug.Log("Walking");
+                currentSpeed = maxSlowSpeed;
+            }
+            else if (currentSpeed <= 0 && currentSpeed <= -maxSlowSpeed)
+            {
+                //Debug.Log("Walking Reverse");
+                currentSpeed = -maxSlowSpeed;
+            }
+        }
+        // Deplacement du joueur en temps normal
+        else
+        {
+            currentSpeed = moveSpeed * vert;
+            if (currentSpeed >= 0 && currentSpeed >= maxSpeed)
+            {
+                currentSpeed = maxSpeed;
+            }
+            else if (currentSpeed <= 0 && currentSpeed <= -maxSpeed)
+            {
+                currentSpeed = -maxSpeed;
+            }
+        }
+        rb.AddForce(transform.forward * currentSpeed);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Vérifie si le joueur est en collision avec le sol
+        // Verifie si le joueur est en collision avec le sol
         if (collision.transform.CompareTag("Terrain"))
         {
-            Debug.Log("Collision enter with ground");
+            //Debug.Log("Collision enter with ground");
 
             jumpAllow = true;
         }
@@ -86,10 +117,10 @@ public class PlayerBehaviour1 : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        // Vérifie si le joueur est en collision avec le sol
+        // Verifie si le joueur est en collision avec le sol
         if (collision.transform.CompareTag("Terrain"))
         {
-            Debug.Log("Collision stay with ground");
+            //Debug.Log("Collision stay with ground");
 
             jumpAllow = true;
         }
@@ -97,7 +128,7 @@ public class PlayerBehaviour1 : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        Debug.Log("Collision leave with ground");
+        //Debug.Log("Collision leave with ground");
 
         jumpAllow = false;
     }
