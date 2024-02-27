@@ -279,6 +279,11 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 112
       objectReference: {fileID: 0}
+    - target: {fileID: 6701282639996193177, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7721783544866018370, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
       propertyPath: m_Name
@@ -288,6 +293,11 @@ PrefabInstance:
         type: 3}
       propertyPath: id
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8418209668182536185, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: jetpackForce
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -436,7 +446,7 @@ GameObject:
   - component: {fileID: 688171180}
   m_Layer: 0
   m_Name: TerrainGroup_0
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -799,15 +809,15 @@ PrefabInstance:
       propertyPath: m_NormalizedViewPortRect.height
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6701282639996193177, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7721783544866018370, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
       propertyPath: m_Name
       value: Player2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8418209668182536185, guid: f35de65aacd60aa4f84177828c0f6392,
-        type: 3}
-      propertyPath: id
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -905,7 +915,7 @@ GameObject:
   - component: {fileID: 1280706664}
   m_Layer: 0
   m_Name: Terrain_0_0_d0e5dccd-f9f9-450c-8b63-08be30965e25
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -1517,7 +1527,6 @@ SceneRoots:
   - {fileID: 877057225}
   - {fileID: 1029991432419927231}
   - {fileID: 258223875}
-  - {fileID: 688171181}
   - {fileID: 1247212799}
   - {fileID: 1386601396}
   - {fileID: 708244221}
@@ -1525,3 +1534,4 @@ SceneRoots:
   - {fileID: 2088332988}
   - {fileID: 1911868415}
   - {fileID: 1381577119}
+  - {fileID: 688171181}
