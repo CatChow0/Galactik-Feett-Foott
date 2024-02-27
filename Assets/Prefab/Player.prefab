@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7683447929837192083}
   - component: {fileID: 2030532172762699159}
   - component: {fileID: 6701282639996193177}
-  - component: {fileID: 6298946663251921921}
+  - component: {fileID: 8532622774754074041}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -93,7 +93,7 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4529451111926295288}
   m_Enabled: 1
---- !u!114 &6298946663251921921
+--- !u!114 &8532622774754074041
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -151,7 +151,6 @@ GameObject:
   - component: {fileID: 9053786669735130288}
   - component: {fileID: 8418209668182536185}
   - component: {fileID: 5770299030298404532}
-  - component: {fileID: 7859742011234256062}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -245,7 +244,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 1
+  m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8418209668182536185
@@ -260,9 +259,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3476424149ddc204fb1e173baeae9840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOnGround: 1
-  speed: 10
-  smoothTurn: 0.1
+  moveSpeed: 20
+  angularSpeed: 1
 --- !u!54 &5770299030298404532
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -272,7 +270,7 @@ Rigidbody:
   m_GameObject: {fileID: 7721783544866018370}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 1
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -288,31 +286,5 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
---- !u!143 &7859742011234256062
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7721783544866018370}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}

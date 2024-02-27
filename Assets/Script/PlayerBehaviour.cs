@@ -6,9 +6,11 @@ public class PlayerBehaviour : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private float angularSpeed;
+    [SerializeField] private float jumpForce;
 
     private Rigidbody rb;
     float hor, vert;
+    bool jump;
 
     private void Awake()
     {
@@ -25,6 +27,13 @@ public class PlayerBehaviour : MonoBehaviour
     {
         hor = Input.GetAxis("Horizontal");
         vert = Input.GetAxis("Vertical");
+        jump = Input.GetButtonDown("Jump");
+
+        if (jump)
+        {
+            rb.AddForce(transform.up * jumpForce);
+        }
+
         //float mouseX = Input.GetAxis("Mouse X");
         //transform.Rotate(transform.up, angularSpeed * mouseX);
         transform.Rotate(transform.up, angularSpeed * hor);
@@ -34,6 +43,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         rb.AddForce(transform.forward * moveSpeed * vert);
     }
 }
