@@ -183,11 +183,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5770299030298404532, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5770299030298404532, guid: f35de65aacd60aa4f84177828c0f6392,
-        type: 3}
       propertyPath: m_Constraints
       value: 112
       objectReference: {fileID: 0}
@@ -195,16 +190,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 8418209668182536185, guid: f35de65aacd60aa4f84177828c0f6392,
-        type: 3}
-      propertyPath: moveSpeed
-      value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 8418209668182536185, guid: f35de65aacd60aa4f84177828c0f6392,
-        type: 3}
-      propertyPath: angularSpeed
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8418209668182536185, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
