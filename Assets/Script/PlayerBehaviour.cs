@@ -10,16 +10,17 @@ public class PlayerBehaviour1 : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float angularSpeed;
     [SerializeField] private float jumpForce;
+    [SerializeField] private float jetpackForce;
     [SerializeField] private int id;
 
     // Initialisation des variables
     private Rigidbody rb;
     float hor, vert;
-    bool jump, jetpack;
+    bool jump, jetpack, jumpAllow;
 
     private void Awake()
     {
-        // R�cup�ration du rigidbody
+        // Recuperation du rigidbody
         rb = GetComponent<Rigidbody>();
     }
 
@@ -47,7 +48,7 @@ public class PlayerBehaviour1 : MonoBehaviour
             jetpack = Input.GetButton("Fire2");
         }
 
-        if (jump)
+        if (jump && jumpAllow)
         {
             rb.AddForce(transform.up * jumpForce);
         }
@@ -55,11 +56,8 @@ public class PlayerBehaviour1 : MonoBehaviour
         // Gestion du jetpack
         if (jetpack)
         {
-            rb.AddForce(transform.up * 50);
+            rb.AddForce(transform.up * jetpackForce);
         }
-
-        //float mouseX = Input.GetAxis("Mouse X");
-        //transform.Rotate(transform.up, angularSpeed * mouseX);
 
         // Rotation du joueur
         transform.Rotate(transform.up, angularSpeed * hor);
@@ -73,5 +71,34 @@ public class PlayerBehaviour1 : MonoBehaviour
     {
         // Deplacement du joueur
         rb.AddForce(transform.forward * moveSpeed * vert);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Vérifie si le joueur est en collision avec le sol
+        if (collision.transform.CompareTag("Terrain"))
+        {
+            Debug.Log("Collision enter with ground");
+
+            jumpAllow = true;
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        // Vérifie si le joueur est en collision avec le sol
+        if (collision.transform.CompareTag("Terrain"))
+        {
+            Debug.Log("Collision stay with ground");
+
+            jumpAllow = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        Debug.Log("Collision leave with ground");
+
+        jumpAllow = false;
     }
 }
