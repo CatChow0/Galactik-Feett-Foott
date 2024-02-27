@@ -6,7 +6,7 @@ public class Ball : MonoBehaviour
 {
 
     // Initialisation des variables changeables dans l'éditeur
-    [SerializeField] private Player player;
+    [SerializeField] private PlayerBehaviour1 player;
     [SerializeField] private float pushForce;
 
 
