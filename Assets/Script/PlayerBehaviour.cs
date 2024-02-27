@@ -2,20 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBehaviour : MonoBehaviour
+public class PlayerBehaviour1 : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private float angularSpeed;
-    [SerializeField] private float jumpForce;
-
-    private Rigidbody rb;
-    float hor, vert;
-    bool jump;
-
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -25,25 +15,14 @@ public class PlayerBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        hor = Input.GetAxis("Horizontal");
-        vert = Input.GetAxis("Vertical");
-        jump = Input.GetButtonDown("Jump");
-
-        if (jump)
-        {
-            rb.AddForce(transform.up * jumpForce);
-        }
-
-        //float mouseX = Input.GetAxis("Mouse X");
+        float hor = Input.GetAxis("Horizontal");
+        float vert = Input.GetAxis("Vertical");
+        float mouseX = Input.GetAxis("Mouse X");
         //transform.Rotate(transform.up, angularSpeed * mouseX);
         transform.Rotate(transform.up, angularSpeed * hor);
+        transform.position = transform.position + transform.forward * moveSpeed * vert * Time.deltaTime;
+        //transform.position = transform.position + (transform.forward * moveSpeed * vert * Time.deltaTime) + (transform.right * moveSpeed * hor * Time.deltaTime);
         Debug.DrawRay(transform.position, transform.forward * 20, Color.blue);
         Debug.DrawRay(transform.position, Vector3.forward * 20, Color.cyan);
-    }
-
-    private void FixedUpdate()
-    {
-
-        rb.AddForce(transform.forward * moveSpeed * vert);
     }
 }
