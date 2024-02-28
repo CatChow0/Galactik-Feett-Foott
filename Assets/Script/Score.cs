@@ -10,14 +10,15 @@ public class Score : MonoBehaviour
 {
     public TextMeshProUGUI scoreText1;
     public TextMeshProUGUI scoreText2;
+    public TextMeshProUGUI timeText;
     private GameManager gameManagerEntity;
-    private int scorePlayer1;
-    private int scorePlayer2;
+    private Timer timer;
 
     // Start is called before the first frame update
     void Start()
     {
         gameManagerEntity = GameManager.GetInstance();
+        timer = Timer.GetInstance();
     }
 
     // Update is called once per frame
@@ -25,5 +26,12 @@ public class Score : MonoBehaviour
     {
         scoreText1.text = gameManagerEntity.scorePlayer1.ToString();
         scoreText2.text = gameManagerEntity.scorePlayer2.ToString();
+
+        int minutes = Mathf.FloorToInt(timer.timeRemaining / 60F);
+        int seconds = Mathf.FloorToInt(timer.timeRemaining - minutes * 60);
+
+        string niceTime = string.Format("{0:0}:{1:00}", minutes, seconds);
+
+        timeText.text = niceTime;
     }
 }

@@ -773,6 +773,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText1: {fileID: 1952963219}
   scoreText2: {fileID: 584706552}
+  timeText: {fileID: 1311557308}
 --- !u!1001 &607894738
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2160,6 +2161,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1688082924}
   m_CullTransparentMesh: 1
+--- !u!1 &1861439267
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1861439268}
+  - component: {fileID: 1861439269}
+  m_Layer: 0
+  m_Name: Timer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1861439268
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861439267}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 51.960674, y: 10.509917, z: 41.82854}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1861439269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861439267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20d86af0b32e2be4bbf31dfc1fa212b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeRemaining: 180
 --- !u!1 &1911868411
 GameObject:
   m_ObjectHideFlags: 0
@@ -2644,6 +2690,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1368330046}
   - {fileID: 585124460}
+  - {fileID: 1861439268}
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 346915739}
