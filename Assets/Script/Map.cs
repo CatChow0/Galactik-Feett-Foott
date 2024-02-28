@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
+
     // Player 1 and 2 score
     private static int player1Score;
     private static int player2Score;

@@ -5,7 +5,7 @@ using UnityEngine.SocialPlatforms.Impl;
 
 public class PlayerBehaviour1 : MonoBehaviour
 {
-
+    [Header("Player Settings")]
     // Initialisation des variables changeables dans l'editeur
     [SerializeField] private float moveSpeed;
     [SerializeField] private float maxSpeed;
@@ -13,8 +13,12 @@ public class PlayerBehaviour1 : MonoBehaviour
     [SerializeField] private float angularSpeed;
     [SerializeField] private float jumpForce;
     [SerializeField] private float jetpackForce;
-    [SerializeField] private float dashForce;
     [SerializeField] private int id;
+
+    [Header("Player Dash settings")]
+    [SerializeField] private float dashDuration;
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private float dashForce;
 
     // Initialisation des variables
     private Rigidbody rb;
@@ -68,8 +72,7 @@ public class PlayerBehaviour1 : MonoBehaviour
 
         if (dash)
         {
-            rb.AddForce(transform.forward * dashForce);
-            // Smooth Dash End after 0.5s
+            Dash();
         }
 
         // Rotation du joueur
@@ -142,4 +145,11 @@ public class PlayerBehaviour1 : MonoBehaviour
 
         jumpAllow = false;
     }
+
+    private void Dash()
+    {
+        Debug.Log("Dash");
+        rb.AddForce(transform.forward * dashForce, ForceMode.Impulse);
+    }
+
 }

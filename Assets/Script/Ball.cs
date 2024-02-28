@@ -5,6 +5,7 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
 
+    [Header("Ball Settings")]
     // Initialisation des variables changeables dans l'éditeur
     [SerializeField] private PlayerBehaviour1 player;
     [SerializeField] private float pushForce;

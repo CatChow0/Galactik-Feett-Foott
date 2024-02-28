@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Goal : MonoBehaviour
 {
+    [Header("Goal Settings")]
     [SerializeField] private int playerID; // 1 or 2
 
     // Start is called before the first frame update
