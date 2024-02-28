@@ -13,12 +13,13 @@ public class PlayerBehaviour1 : MonoBehaviour
     [SerializeField] private float angularSpeed;
     [SerializeField] private float jumpForce;
     [SerializeField] private float jetpackForce;
+    [SerializeField] private float dashForce;
     [SerializeField] private int id;
 
     // Initialisation des variables
     private Rigidbody rb;
     float hor, vert, currentSpeed;
-    bool slow, jump, jetpack, jumpAllow;
+    bool slow, jump, jetpack, jumpAllow, dash;
 
     private void Awake()
     {
@@ -42,6 +43,7 @@ public class PlayerBehaviour1 : MonoBehaviour
             jump = Input.GetButtonDown("Jump");
             jetpack = Input.GetButton("Fire1");
             slow = Input.GetButton("Slow1");
+            dash = Input.GetButtonDown("Dash1");
         }
         else if (id == 2)
         {
@@ -50,6 +52,7 @@ public class PlayerBehaviour1 : MonoBehaviour
             jump = Input.GetButtonDown("Jump2");
             jetpack = Input.GetButton("Fire2");
             slow = Input.GetButton("Slow2");
+            dash = Input.GetButtonDown("Dash2");
         }
 
         if (jump && jumpAllow)
@@ -61,6 +64,12 @@ public class PlayerBehaviour1 : MonoBehaviour
         if (jetpack)
         {
             rb.AddForce(transform.up * jetpackForce);
+        }
+
+        if (dash)
+        {
+            rb.AddForce(transform.forward * dashForce);
+            // Smooth Dash End after 0.5s
         }
 
         // Rotation du joueur
@@ -104,6 +113,7 @@ public class PlayerBehaviour1 : MonoBehaviour
         rb.AddForce(transform.forward * currentSpeed);
     }
 
+
     private void OnCollisionEnter(Collision collision)
     {
         // Verifie si le joueur est en collision avec le sol
@@ -131,5 +141,10 @@ public class PlayerBehaviour1 : MonoBehaviour
         //Debug.Log("Collision leave with ground");
 
         jumpAllow = false;
+    }
+
+    public int GetID()
+    {
+        return id;
     }
 }
