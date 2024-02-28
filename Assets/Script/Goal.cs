@@ -21,12 +21,12 @@ public class Goal : MonoBehaviour
     }
 
     // Check if the ball has entered the goal
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.CompareTag("Ball"))
+        if (collision.transform.CompareTag("Ball"))
         {
             GameManager.GetInstance().ScorePoint(playerID);
         }
     }
-    
+
 }
