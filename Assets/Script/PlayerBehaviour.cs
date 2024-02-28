@@ -142,4 +142,9 @@ public class PlayerBehaviour1 : MonoBehaviour
 
         jumpAllow = false;
     }
+
+    public int GetID()
+    {
+        return id;
+    }
 }
