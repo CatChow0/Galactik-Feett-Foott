@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
 
-    private float scorePlayer1, scorePlayer2;
+    private int scorePlayer1, scorePlayer2;
     private Transform ballStartPos;
     private Transform player1StartPos;
     private Transform player2StartPos;
@@ -74,12 +74,14 @@ public class GameManager : MonoBehaviour
     // Update le score en cas de but
     public void ScorePoint(int playerID)
     {
+        Debug.Log("Goal scored by player " + playerID);
         if (playerID == 1 && allowGoal)
         {
             scorePlayer2++;
             Debug.Log("Player 2 scored : Player 1 | " + scorePlayer1 + " - " + scorePlayer2 + " | Player 2");
 
             allowGoal = false;
+            GlobalUi.UpdateScore(playerID, scorePlayer2);
 
             StartCoroutine(waitGameRoutine());
         }
@@ -89,6 +91,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Player 1 scored : Player 1 | " + scorePlayer1 + " - " + scorePlayer2 + " | Player 2");
 
             allowGoal = false;
+            GlobalUi.UpdateScore(playerID, scorePlayer1);
 
             StartCoroutine(waitGameRoutine());
         }
@@ -97,7 +100,7 @@ public class GameManager : MonoBehaviour
     IEnumerator waitGameRoutine()
     {
         yield return new WaitForSecondsRealtime(5);
-
+        
         GameRoutine(true);
     }
 }
