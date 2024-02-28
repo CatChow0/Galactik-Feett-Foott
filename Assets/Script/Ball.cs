@@ -31,7 +31,7 @@ public class Ball : MonoBehaviour
             Debug.Log("Collision enter");
 
             // Ajoute une force à la balle
-            GetComponent<Rigidbody>().AddForce((transform.position - collision.transform.position).normalized * pushForce);
+            GetComponent<Rigidbody>().AddForce((transform.position - collision.transform.position).normalized * pushForce * (collision.rigidbody.velocity.magnitude / 7.5f));
         }
        
     }
