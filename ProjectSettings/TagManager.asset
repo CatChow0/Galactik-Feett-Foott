@@ -7,6 +7,7 @@ TagManager:
   - Ground
   - Ball
   - Terrain
+  - BallStartPos
   layers:
   - Default
   - TransparentFX

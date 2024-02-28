@@ -152,4 +152,8 @@ public class PlayerBehaviour1 : MonoBehaviour
         rb.AddForce(transform.forward * dashForce, ForceMode.Impulse);
     }
 
+    public int GetID()
+    {
+        return id;
+    }
 }

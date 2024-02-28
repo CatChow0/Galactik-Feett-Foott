@@ -299,6 +299,11 @@ PrefabInstance:
       propertyPath: jetpackForce
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 8418209668182536185, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: jetpackEnergyMax
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -841,6 +846,11 @@ PrefabInstance:
         type: 3}
       propertyPath: pushForce
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4657679280770074785, guid: 1e3053c99410dcc4f838d6bffeabd62e,
+        type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6869573018274051202, guid: 1e3053c99410dcc4f838d6bffeabd62e,
         type: 3}

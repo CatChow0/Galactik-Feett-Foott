@@ -6,6 +6,7 @@ public class Goal : MonoBehaviour
 {
     [Header("Goal Settings")]
     [SerializeField] private int playerID; // 1 or 2
+    [SerializeField] private Ball ball;
 
     // Start is called before the first frame update
     void Start()
@@ -24,14 +25,7 @@ public class Goal : MonoBehaviour
     {
         if (other.CompareTag("Ball"))
         {
-            if (playerID == 1)
-            {
-                Map.AddPoint(playerID);
-            }
-            else if (playerID == 2)
-            {
-                Map.AddPoint(playerID);
-            }
+            GameManager.GetInstance().ScorePoint(playerID);
         }
     }
     

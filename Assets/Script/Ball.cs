@@ -9,12 +9,13 @@ public class Ball : MonoBehaviour
     // Initialisation des variables changeables dans l'éditeur
     [SerializeField] private PlayerBehaviour1 player;
     [SerializeField] private float pushForce;
+    //Transform ballStartPos = GameObject.Find("BallStartPos").transform;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        //this.transform.position = ballStartPos.position;
     }
 
     // Update is called once per frame
@@ -29,7 +30,7 @@ public class Ball : MonoBehaviour
         // Vérifie si le joueur est en collision avec la balle
         if (collision.transform.CompareTag("Player"))
         {
-            Debug.Log("Collision enter");
+             //Debug.Log("Collision enter");
 
             // Ajoute une force à la balle
             GetComponent<Rigidbody>().AddForce((transform.position - collision.transform.position).normalized * pushForce * (collision.rigidbody.velocity.magnitude / 7.5f));
