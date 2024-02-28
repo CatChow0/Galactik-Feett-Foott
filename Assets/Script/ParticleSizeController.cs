@@ -8,12 +8,12 @@ public class ParticleSizeController : MonoBehaviour
     public float minSpeed = 0f; // Vitesse minimale de la balle
     public float maxSpeed = 10f; // Vitesse maximale de la balle
 
-    private ParticleSystem particleSystem;
+    private ParticleSystem particleElements;
 
     void Start()
     {
         // Récupère la référence au composant ParticleSystem
-        particleSystem = GetComponent<ParticleSystem>();
+        particleElements = GetComponent<ParticleSystem>();
     }
 
     void Update()
@@ -25,7 +25,7 @@ public class ParticleSizeController : MonoBehaviour
             float speedNormalized = Mathf.InverseLerp(minSpeed, maxSpeed, ballRigidbody.velocity.magnitude);
 
             // Utilise cette valeur pour définir la taille des particules entre minSize et maxSize
-            var mainModule = particleSystem.main;
+            var mainModule = particleElements.main;
             mainModule.startSize = Mathf.Lerp(minSize, maxSize, speedNormalized);
         }
     }
