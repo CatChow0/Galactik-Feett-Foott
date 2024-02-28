@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager instance;
+    public static GameManager instance;
 
-    private int scorePlayer1, scorePlayer2;
+    public int scorePlayer1, scorePlayer2;
     private Transform ballStartPos;
     private Transform player1StartPos;
     private Transform player2StartPos;
@@ -45,21 +45,27 @@ public class GameManager : MonoBehaviour
 
         // Récupère la balle et la place à sa position de départ
         ballStartPos = GameObject.Find("BallStartPos").transform;
-        Ball ball = FindObjectOfType<Ball>();
+        GameObject ball = GameObject.Find("Ball");
         ball.transform.position = ballStartPos.position;
         ball.transform.rotation = ballStartPos.rotation;
+        ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        ball.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
         // Récupère le joueur 1 et le place à sa position de départ
         player1StartPos = GameObject.Find("Player1StartPos").transform;
-        PlayerBehaviour1 player1 = FindObjectOfType<PlayerBehaviour1>();
+        GameObject player1 = GameObject.Find("Player1");
         player1.transform.position = player1StartPos.position;
         player1.transform.rotation = player1StartPos.rotation;
+        player1.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        player1.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
         // Récupère le joueur 2 et le place à sa position de départ
         player2StartPos = GameObject.Find("Player2StartPos").transform;
-        PlayerBehaviour1 player2 = FindObjectOfType<PlayerBehaviour1>();
+        GameObject player2 = GameObject.Find("Player2");
         player2.transform.position = player2StartPos.position;
         player2.transform.rotation = player2StartPos.rotation;
+        player2.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        player2.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
     }
 
     public void GameRoutine(bool restart)
@@ -83,7 +89,7 @@ public class GameManager : MonoBehaviour
             allowGoal = false;
             GlobalUi.UpdateScore(playerID, scorePlayer2);
 
-            StartCoroutine(waitGameRoutine());
+            StartCoroutine(WaitGameRoutine());
         }
         else if (playerID == 2 && allowGoal)
         {
@@ -93,11 +99,11 @@ public class GameManager : MonoBehaviour
             allowGoal = false;
             GlobalUi.UpdateScore(playerID, scorePlayer1);
 
-            StartCoroutine(waitGameRoutine());
+            StartCoroutine(WaitGameRoutine());
         }
     }
 
-    IEnumerator waitGameRoutine()
+    IEnumerator WaitGameRoutine()
     {
         yield return new WaitForSecondsRealtime(5);
         

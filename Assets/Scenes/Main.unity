@@ -805,6 +805,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 584706550}
   m_CullTransparentMesh: 1
+--- !u!1 &585124459
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 585124460}
+  - component: {fileID: 585124461}
+  m_Layer: 0
+  m_Name: ScoreManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &585124460
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585124459}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 48.89273, y: 7.534732, z: 15.122245}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &585124461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585124459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 034cdf48b71a39c43a62554f82daddd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText1: {fileID: 1952963219}
+  scoreText2: {fileID: 584706552}
 --- !u!1 &665284905
 GameObject:
   m_ObjectHideFlags: 0
@@ -1283,7 +1329,7 @@ PrefabInstance:
     - target: {fileID: 904909766492874873, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 75.43
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 904909766492874873, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
@@ -1417,7 +1463,7 @@ PrefabInstance:
     - target: {fileID: 7708651271999747424, guid: 1e3053c99410dcc4f838d6bffeabd62e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 93.27
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7708651271999747424, guid: 1e3053c99410dcc4f838d6bffeabd62e,
         type: 3}
@@ -1723,7 +1769,7 @@ GameObject:
   - component: {fileID: 1368330047}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1755,6 +1801,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70736553bfaa37842bb5cc26b90aa7ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scorePlayer1: 0
+  scorePlayer2: 0
 --- !u!1 &1381577116
 GameObject:
   m_ObjectHideFlags: 0
@@ -2564,6 +2612,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1368330046}
+  - {fileID: 585124460}
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 346915739}

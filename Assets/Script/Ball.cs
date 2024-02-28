@@ -9,8 +9,13 @@ public class Ball : MonoBehaviour
     // Initialisation des variables changeables dans l'éditeur
     [SerializeField] private PlayerBehaviour1 player;
     [SerializeField] private float pushForce;
-    //Transform ballStartPos = GameObject.Find("BallStartPos").transform;
+    private Rigidbody rb;
 
+    private void Awake()
+    {
+        // Recuperation du rigidbody
+        rb = GetComponent<Rigidbody>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +38,7 @@ public class Ball : MonoBehaviour
              //Debug.Log("Collision enter");
 
             // Ajoute une force à la balle
-            GetComponent<Rigidbody>().AddForce((transform.position - collision.transform.position).normalized * pushForce * (collision.rigidbody.velocity.magnitude / 7.5f));
+            rb.AddForce((transform.position - collision.transform.position).normalized * pushForce * (collision.rigidbody.velocity.magnitude / 7.5f));
         }
        
     }
