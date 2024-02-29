@@ -7,6 +7,7 @@ public class Timer : MonoBehaviour
     public static Timer instance;
 
     [SerializeField] public float timeRemaining;
+    private float defaultTime;
 
 
     public static Timer GetInstance()
@@ -24,11 +25,21 @@ public class Timer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        defaultTime = instance.timeRemaining;
     }
 
     // Update is called once per frame
     void Update()
+    {
+        CountdownTimer();
+    }
+
+    public void ResetTimer()
+    {
+        timeRemaining = defaultTime;
+    }
+
+    public void CountdownTimer()
     {
         if (timeRemaining > 0)
         {
