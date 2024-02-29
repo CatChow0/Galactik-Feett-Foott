@@ -34,5 +34,9 @@ public class Timer : MonoBehaviour
         {
             timeRemaining -= Time.deltaTime;
         }
+        else if (timeRemaining < 0)
+        {
+            timeRemaining = 0;
+        }
     }
 }
