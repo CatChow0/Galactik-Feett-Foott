@@ -80,7 +80,6 @@ public class GameManager : MonoBehaviour
     // Update le score en cas de but
     public void ScorePoint(int playerID)
     {
-        Debug.Log("Goal scored by player " + playerID);
         if (playerID == 1 && allowGoal)
         {
             scorePlayer2++;

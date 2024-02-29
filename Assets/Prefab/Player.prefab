@@ -150,8 +150,8 @@ GameObject:
   - component: {fileID: 730757001846853025}
   - component: {fileID: 5173670061403093878}
   - component: {fileID: 9053786669735130288}
-  - component: {fileID: 8418209668182536185}
   - component: {fileID: 5770299030298404532}
+  - component: {fileID: 6794485858258545965}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -249,28 +249,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8418209668182536185
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7721783544866018370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3476424149ddc204fb1e173baeae9840, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 125
-  maxSpeed: 100
-  maxSlowSpeed: 62.5
-  angularSpeed: 0.85
-  jumpForce: 2500
-  jetpackForce: 50
-  id: 1
-  dashDuration: 0
-  dashSpeed: 0
-  dashForce: 0
 --- !u!54 &5770299030298404532
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -298,6 +276,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &6794485858258545965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7721783544866018370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3476424149ddc204fb1e173baeae9840, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 125
+  maxSpeed: 100
+  maxSlowSpeed: 62.5
+  angularSpeed: 0.85
+  jumpForce: 2500
+  jetpackForce: 50
+  id: 0
+  dashDuration: 0
+  dashSpeed: 0
+  dashForce: 0
 --- !u!1 &7769041637490491263
 GameObject:
   m_ObjectHideFlags: 0

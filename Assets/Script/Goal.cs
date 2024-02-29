@@ -7,6 +7,7 @@ public class Goal : MonoBehaviour
     [Header("Goal Settings")]
     [SerializeField] private int playerID; // 1 or 2
     [SerializeField] private Ball ball;
+    [SerializeField] public ParticleSystem goalParticle;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,9 @@ public class Goal : MonoBehaviour
     {
         if (collision.transform.CompareTag("Ball"))
         {
+            // Play goal particle
+            goalParticle.startColor = ball.lastPlayerTouchId == 1 ? Color.green : Color.blue;
+            goalParticle.Play();
             GameManager.GetInstance().ScorePoint(playerID);
         }
     }
