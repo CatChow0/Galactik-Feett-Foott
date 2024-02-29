@@ -7,8 +7,9 @@ public class Ball : MonoBehaviour
 
     [Header("Ball Settings")]
     // Initialisation des variables changeables dans l'éditeur
-    [SerializeField] private PlayerBehaviour1 player;
+    [SerializeField] private PlayerBehaviour player;
     [SerializeField] private float pushForce;
+    public int lastPlayerTouchId;
     private Rigidbody rb;
 
     private void Awake()
@@ -35,7 +36,8 @@ public class Ball : MonoBehaviour
         // Vérifie si le joueur est en collision avec la balle
         if (collision.transform.CompareTag("Player"))
         {
-             //Debug.Log("Collision enter");
+            // Récupère l'id du joueur qui a touché la balle
+            lastPlayerTouchId = collision.transform.GetComponent<PlayerBehaviour>().id;
 
             // Ajoute une force à la balle
             rb.AddForce((transform.position - collision.transform.position).normalized * pushForce * (collision.rigidbody.velocity.magnitude / 7.5f));

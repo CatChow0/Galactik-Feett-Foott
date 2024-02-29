@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 
-public class PlayerBehaviour1 : MonoBehaviour
+public class PlayerBehaviour : MonoBehaviour
 {
     [Header("Player Settings")]
     // Initialisation des variables changeables dans l'editeur
@@ -13,11 +13,10 @@ public class PlayerBehaviour1 : MonoBehaviour
     [SerializeField] private float angularSpeed;
     [SerializeField] private float jumpForce;
     [SerializeField] private float jetpackForce;
-    [SerializeField] private int id;
+    [SerializeField] public int id;
 
     [Header("Player Dash settings")]
     [SerializeField] private float dashDuration;
-    [SerializeField] private float dashSpeed;
     [SerializeField] private float dashForce;
 
     // Initialisation des variables
@@ -149,7 +148,17 @@ public class PlayerBehaviour1 : MonoBehaviour
     private void Dash()
     {
         Debug.Log("Dash");
-        rb.AddForce(transform.forward * dashForce, ForceMode.Impulse);
+        // Recupere la direction du joueur et ajoute une force dans cette direction pour le dash et utilise une coroutine pour le temps de dash et un lerp pour la vitesse
+        Vector3 dashDirection = transform.forward;
+        rb.AddForce(dashDirection * dashForce, ForceMode.Impulse);
+        StartCoroutine(DashTime());
+    }
+
+    private IEnumerator DashTime()
+    {
+        // Attend le temps de dash et remet la vitesse du joueur a la normale
+        yield return new WaitForSeconds(dashDuration);
+        rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, 0.8f);
     }
 
     public int GetID()

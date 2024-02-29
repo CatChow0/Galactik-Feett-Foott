@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class GameManager : MonoBehaviour
     private Transform player1StartPos;
     private Transform player2StartPos;
     private bool allowGoal;
+    private bool restart = false;
+    private Timer timerInstance;
 
     public static GameManager GetInstance()
     {
@@ -28,13 +31,14 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        timerInstance = Timer.GetInstance();
         SpawnPosition();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        EndGame();
     }
 
     // Met les joueurs et la balle à leur position de départ
@@ -68,11 +72,18 @@ public class GameManager : MonoBehaviour
         player2.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
     }
 
-    public void GameRoutine(bool restart)
+    public void GameRoutine(bool respawn)
     {
-        if (restart)
+        if (respawn && !restart)
         {
             SpawnPosition();
+        }
+        else if (respawn && restart)
+        {
+            SpawnPosition();
+            scorePlayer1 = 0;
+            scorePlayer2 = 0;
+            restart = false;
         }
     }
 
@@ -80,7 +91,6 @@ public class GameManager : MonoBehaviour
     // Update le score en cas de but
     public void ScorePoint(int playerID)
     {
-        Debug.Log("Goal scored by player " + playerID);
         if (playerID == 1 && allowGoal)
         {
             scorePlayer2++;
@@ -108,5 +118,30 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(5);
         
         GameRoutine(true);
+        timerInstance.ResetTimer();
+    }
+
+    public void EndGame()
+    {
+        if (timerInstance.timeRemaining <= 0)
+        {
+            Debug.Log("Time's up");
+
+            if (scorePlayer1 > scorePlayer2)
+            {
+                Debug.Log("Player 1 wins");
+            }
+            else if (scorePlayer1 < scorePlayer2)
+            {
+                Debug.Log("Player 2 wins");
+            }
+            else
+            {
+                Debug.Log("Draw");
+            }
+
+            restart = true;
+            StartCoroutine(WaitGameRoutine());
+        }
     }
 }
