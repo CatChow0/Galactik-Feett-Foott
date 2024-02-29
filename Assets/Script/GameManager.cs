@@ -72,18 +72,12 @@ public class GameManager : MonoBehaviour
         player2.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
     }
 
-    public void GameRoutine(bool respawn)
+    public void RestartGame()
     {
-        if (respawn && !restart)
+        if (restart)
         {
-            SpawnPosition();
-        }
-        else if (respawn && restart)
-        {
-            SpawnPosition();
-            scorePlayer1 = 0;
-            scorePlayer2 = 0;
             restart = false;
+            timerInstance.ResetTimer();
         }
     }
 
@@ -113,12 +107,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ResetScore()
+    {
+        scorePlayer1 = 0;
+        scorePlayer2 = 0;
+    }
+
     IEnumerator WaitGameRoutine()
     {
         yield return new WaitForSecondsRealtime(5);
-        
-        GameRoutine(true);
-        timerInstance.ResetTimer();
+
+        SpawnPosition();
+    }
+
+    IEnumerator WaitGameRestart()
+    {
+        SpawnPosition();
+        ResetScore();
+
+        yield return new WaitForSecondsRealtime(5);
+
+        RestartGame();
     }
 
     public void EndGame()
@@ -141,7 +150,7 @@ public class GameManager : MonoBehaviour
             }
 
             restart = true;
-            StartCoroutine(WaitGameRoutine());
+            StartCoroutine(WaitGameRestart());
         }
     }
 }
