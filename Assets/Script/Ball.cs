@@ -9,7 +9,7 @@ public class Ball : MonoBehaviour
     // Initialisation des variables changeables dans l'éditeur
     [SerializeField] private PlayerBehaviour player;
     [SerializeField] private float pushForce;
-    [SerializeField] private int maxBallSpeed;
+    [SerializeField] private float maxBallSpeed;
     public int lastPlayerTouchId;
     private Rigidbody rb;
 
@@ -32,6 +32,15 @@ public class Ball : MonoBehaviour
         Debug.DrawRay(transform.position, (player.transform.position - transform.position), Color.green);
     }
 
+    private void FixedUpdate()
+    {
+        // Limite la vitesse de la balle
+        if (rb.velocity.magnitude > maxBallSpeed)
+        {
+            rb.velocity = rb.velocity.normalized * maxBallSpeed;
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         // Vérifie si le joueur est en collision avec la balle
@@ -43,11 +52,7 @@ public class Ball : MonoBehaviour
             // Ajoute une force à la balle
             rb.AddForce((transform.position - collision.transform.position).normalized * pushForce * (collision.rigidbody.velocity.magnitude / 7.5f));
 
-            // limiter la vitesse de la balle
-            if (rb.velocity.magnitude > maxBallSpeed)
-            {
-                rb.velocity = rb.velocity.normalized * maxBallSpeed;
-            }
+            
         }
        
     }
