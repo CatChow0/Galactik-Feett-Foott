@@ -2448,30 +2448,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 2023170042}
-    - target: {fileID: 322863189072738733, guid: 1e3053c99410dcc4f838d6bffeabd62e,
-        type: 3}
-      propertyPath: pushForce
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 6869573018274051202, guid: 1e3053c99410dcc4f838d6bffeabd62e,
         type: 3}
       propertyPath: m_Name
       value: Ball
-      objectReference: {fileID: 0}
-    - target: {fileID: 7708651271999747424, guid: 1e3053c99410dcc4f838d6bffeabd62e,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7708651271999747424, guid: 1e3053c99410dcc4f838d6bffeabd62e,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7708651271999747424, guid: 1e3053c99410dcc4f838d6bffeabd62e,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 7708651271999747424, guid: 1e3053c99410dcc4f838d6bffeabd62e,
         type: 3}
@@ -2522,26 +2502,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8428609498744423268, guid: 1e3053c99410dcc4f838d6bffeabd62e,
-        type: 3}
-      propertyPath: ShapeModule.m_Texture
-      value: 
-      objectReference: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
-    - target: {fileID: 8428609498744423268, guid: 1e3053c99410dcc4f838d6bffeabd62e,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8428609498744423268, guid: 1e3053c99410dcc4f838d6bffeabd62e,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0.78736246
-      objectReference: {fileID: 0}
-    - target: {fileID: 8428609498744423268, guid: 1e3053c99410dcc4f838d6bffeabd62e,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
