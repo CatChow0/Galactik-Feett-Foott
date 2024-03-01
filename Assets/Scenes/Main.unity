@@ -303,6 +303,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ball: {fileID: 1247212800}
   arrow: {fileID: 24586932}
+--- !u!20 &84274764 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 2030532172762699159, guid: f35de65aacd60aa4f84177828c0f6392,
+    type: 3}
+  m_PrefabInstance: {fileID: 346915739}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &115128314
 GameObject:
   m_ObjectHideFlags: 0
@@ -750,6 +756,11 @@ PrefabInstance:
       propertyPath: m_NormalizedViewPortRect.height
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4529451111926295288, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: m_TagString
+      value: CameraPlayer1
+      objectReference: {fileID: 0}
     - target: {fileID: 5033090504112413956, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
       propertyPath: dashSpeed
@@ -835,6 +846,11 @@ PrefabInstance:
       propertyPath: id
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 84274764}
     - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
       propertyPath: ball
@@ -2191,6 +2207,11 @@ PrefabInstance:
       propertyPath: m_NormalizedViewPortRect.height
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4529451111926295288, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: m_TagString
+      value: CameraPlayer2
+      objectReference: {fileID: 0}
     - target: {fileID: 5033090504112413956, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
       propertyPath: orientation
@@ -2216,6 +2237,11 @@ PrefabInstance:
       propertyPath: id
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1525531150}
     - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
       propertyPath: ball
@@ -3016,6 +3042,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!20 &1525531150 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 2030532172762699159, guid: f35de65aacd60aa4f84177828c0f6392,
+    type: 3}
+  m_PrefabInstance: {fileID: 877057225}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1550921506
 GameObject:
   m_ObjectHideFlags: 0

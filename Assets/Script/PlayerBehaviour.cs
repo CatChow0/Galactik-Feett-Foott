@@ -14,6 +14,8 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private float jetpackForce;
     [SerializeField] public int id;
+    [SerializeField] private int fov;
+    [SerializeField] private Camera cam;
 
     [Header("Player Dash settings")]
     [SerializeField] private float dashDuration;
@@ -33,6 +35,7 @@ public class PlayerBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
     }
 
     // Update is called once per frame
@@ -151,6 +154,8 @@ public class PlayerBehaviour : MonoBehaviour
         // Recupere la direction du joueur et ajoute une force dans cette direction pour le dash et utilise une coroutine pour le temps de dash et un lerp pour la vitesse
         Vector3 dashDirection = transform.forward;
         rb.AddForce(dashDirection * dashForce, ForceMode.Impulse);
+        // set la fov de la camera a 120 en utilisant un lerp
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 120, 0.5f);
         StartCoroutine(DashTime());
     }
 
@@ -159,7 +164,10 @@ public class PlayerBehaviour : MonoBehaviour
         // Attend le temps de dash et remet la vitesse du joueur a la normale
         yield return new WaitForSeconds(dashDuration);
         rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, 0.8f);
+        // set la fov de la camera a 60 en utilisant un lerp pour revenir a la fov de base
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, fov, 0.5f);
     }
+
 
     public int GetID()
     {

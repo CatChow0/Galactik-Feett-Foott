@@ -9,6 +9,8 @@ TagManager:
   - Terrain
   - BallStartPos
   - GameManager
+  - CameraPlayer1
+  - CameraPlayer2
   layers:
   - Default
   - TransparentFX
