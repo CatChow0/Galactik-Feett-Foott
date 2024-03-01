@@ -295,9 +295,11 @@ MonoBehaviour:
   jumpForce: 2500
   jetpackForce: 50
   id: 0
-  fov: 0
-  dashDuration: 0
-  dashForce: 0
+  fov: 60
+  cam: {fileID: 0}
+  dashDuration: 0.1
+  dashForce: 500
+  dashFov: 70
 --- !u!1 &7769041637490491263
 GameObject:
   m_ObjectHideFlags: 0

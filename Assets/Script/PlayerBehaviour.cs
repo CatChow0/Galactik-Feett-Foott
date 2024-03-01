@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
+using DG.Tweening;
 
 public class PlayerBehaviour : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class PlayerBehaviour : MonoBehaviour
     [Header("Player Dash settings")]
     [SerializeField] private float dashDuration;
     [SerializeField] private float dashForce;
+    [SerializeField] private float dashFov;
 
     // Initialisation des variables
     private Rigidbody rb;
@@ -155,8 +157,8 @@ public class PlayerBehaviour : MonoBehaviour
         Vector3 dashDirection = transform.forward;
         rb.AddForce(dashDirection * dashForce, ForceMode.Impulse);
         // set la fov de la camera a 120 en utilisant un lerp
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 120, 0.5f);
         StartCoroutine(DashTime());
+        DoFov(dashFov);
     }
 
     private IEnumerator DashTime()
@@ -164,8 +166,13 @@ public class PlayerBehaviour : MonoBehaviour
         // Attend le temps de dash et remet la vitesse du joueur a la normale
         yield return new WaitForSeconds(dashDuration);
         rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, 0.8f);
-        // set la fov de la camera a 60 en utilisant un lerp pour revenir a la fov de base
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, fov, 0.5f);
+        DoFov(fov);
+    }
+
+    private void DoFov(float end_value)
+    {
+        // Clean fov
+        cam.DOFieldOfView(end_value, 0.15f);
     }
 
 
