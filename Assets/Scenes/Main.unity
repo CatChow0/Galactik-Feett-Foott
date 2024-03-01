@@ -2427,6 +2427,21 @@ PrefabInstance:
       propertyPath: pushForce
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 3718456985349930520, guid: 1e3053c99410dcc4f838d6bffeabd62e,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3718456985349930520, guid: 1e3053c99410dcc4f838d6bffeabd62e,
+        type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3718456985349930520, guid: 1e3053c99410dcc4f838d6bffeabd62e,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6869573018274051202, guid: 1e3053c99410dcc4f838d6bffeabd62e,
         type: 3}
       propertyPath: m_Name
