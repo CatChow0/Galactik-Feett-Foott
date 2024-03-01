@@ -172,6 +172,9 @@ public class PlayerBehaviour : MonoBehaviour
     private void DoFov(float end_value)
     {
         // Clean fov
+
+        //cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, end_value, 0.5f);
+
         cam.DOFieldOfView(end_value, 0.15f);
     }
 
