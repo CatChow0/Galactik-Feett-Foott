@@ -23,10 +23,20 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private float dashForce;
     [SerializeField] private float dashFov;
 
+    [Header("Grapple Hook Settings")]
+    [SerializeField] private float grappleSpeed;
+    [SerializeField] private float grappleMinRange;
+    [SerializeField] private Ball targetBall;
+    [SerializeField] private GameObject grappleObject;
+
+
+    private bool isGrappling;
+    private Quaternion initialRotation;
+
     // Initialisation des variables
     private Rigidbody rb;
     float hor, vert, currentSpeed;
-    bool slow, jump, jetpack, jumpAllow, dash;
+    bool slow, jump, jetpack, jumpAllow, dash, grappleHook;
 
     private void Awake()
     {
@@ -52,6 +62,7 @@ public class PlayerBehaviour : MonoBehaviour
             jetpack = Input.GetButton("Fire1");
             slow = Input.GetButton("Slow1");
             dash = Input.GetButtonDown("Dash1");
+            grappleHook = Input.GetButtonDown("GrappleHook");
         }
         else if (id == 2)
         {
@@ -61,6 +72,7 @@ public class PlayerBehaviour : MonoBehaviour
             jetpack = Input.GetButton("Fire2");
             slow = Input.GetButton("Slow2");
             dash = Input.GetButtonDown("Dash2");
+            grappleHook = Input.GetButtonDown("GrappleHook1");
         }
 
         if (jump && jumpAllow)
@@ -77,6 +89,49 @@ public class PlayerBehaviour : MonoBehaviour
         if (dash)
         {
             Dash();
+        }
+
+        if (grappleHook)
+        {
+            // si le joueur est en train de grapple
+            if (isGrappling)
+            {
+                isGrappling = false;
+            }
+            else
+            {
+                Grapple();
+            }
+        }
+
+        if (isGrappling)
+        {
+            // Fait pivoter le joueur vers la balle de manière douce
+            Quaternion targetRotation = Quaternion.LookRotation(targetBall.transform.position - transform.position);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * grappleSpeed * 0.1f); // réduit la vitesse de rotation du joueur
+
+            grappleObject.SetActive(true);
+
+            // Modifie la position et la taille de l'objet en fonction de la position du joueur et de la balle
+            Vector3 playerPosition = transform.position;
+            Vector3 ballPosition = targetBall.transform.position;
+            Vector3 midPoint = (playerPosition + ballPosition) / 2;
+
+            grappleObject.transform.position = midPoint;
+            grappleObject.transform.LookAt(ballPosition);
+            grappleObject.transform.localScale = new Vector3(grappleObject.transform.localScale.x, grappleObject.transform.localScale.y, Vector3.Distance(playerPosition, ballPosition));
+
+        }
+        else
+        {
+            // Rotation du joueur
+            transform.Rotate(transform.up, angularSpeed * hor);
+
+            // Rétablit la rotation initiale du joueur en x et z
+            Quaternion currentRotation = transform.rotation;
+            transform.rotation = Quaternion.Euler(initialRotation.eulerAngles.x, currentRotation.eulerAngles.y, initialRotation.eulerAngles.z);
+
+            grappleObject.SetActive(false);
         }
 
         // Rotation du joueur
@@ -118,6 +173,12 @@ public class PlayerBehaviour : MonoBehaviour
             }
         }
         rb.AddForce(transform.forward * currentSpeed);
+
+        if (isGrappling)
+        {
+            float step = grappleSpeed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, targetBall.transform.position, step);
+        }
     }
 
 
@@ -130,6 +191,19 @@ public class PlayerBehaviour : MonoBehaviour
 
             jumpAllow = true;
         }
+
+        // Verifie si le joueur est en collision avec la balle
+        if (collision.gameObject == targetBall.gameObject && isGrappling)
+        {
+            isGrappling = false;
+
+            // Ajoute une force à la balle dans la direction du mouvement du joueur
+            Rigidbody ballRigidbody = targetBall.GetComponent<Rigidbody>();
+            Vector3 pushDirection = (targetBall.transform.position - transform.position).normalized;
+            ballRigidbody.AddForce(pushDirection * grappleSpeed, ForceMode.Impulse);
+        }
+
+
     }
 
     private void OnCollisionStay(Collision collision)
@@ -141,6 +215,8 @@ public class PlayerBehaviour : MonoBehaviour
 
             jumpAllow = true;
         }
+
+        
     }
 
     private void OnCollisionExit(Collision collision)
@@ -165,7 +241,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         // Attend le temps de dash et remet la vitesse du joueur a la normale
         yield return new WaitForSeconds(dashDuration);
-        rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, 0.8f);
+        rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, 0.5f);
         DoFov(fov);
     }
 
@@ -178,9 +254,19 @@ public class PlayerBehaviour : MonoBehaviour
         cam.DOFieldOfView(end_value, 0.15f);
     }
 
-
     public int GetID()
     {
         return id;
+    }
+
+    private void Grapple()
+    {
+        // Vérifie si la balle est à portée
+        if (Vector3.Distance(transform.position, targetBall.transform.position) >= grappleMinRange)
+        {
+            // Grapple
+            isGrappling = true;
+            initialRotation = transform.rotation;
+        }
     }
 }
