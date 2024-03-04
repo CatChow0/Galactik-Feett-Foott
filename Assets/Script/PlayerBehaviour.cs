@@ -241,7 +241,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         // Attend le temps de dash et remet la vitesse du joueur a la normale
         yield return new WaitForSeconds(dashDuration);
-        rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, 0.5f);
+        rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, 0.8f);
         DoFov(fov);
     }
 

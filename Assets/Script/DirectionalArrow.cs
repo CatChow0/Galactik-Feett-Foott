@@ -17,9 +17,6 @@ public class DirectionalArrow : MonoBehaviour
         {
             Vector3 direction = target.position - transform.position;
 
-            // Ignorez la rotation autour de l'axe Y
-            direction.y = 0f;
-
             Quaternion rotation = Quaternion.LookRotation(direction);
 
             // Appliquer l'offset d'Euler à la rotation
