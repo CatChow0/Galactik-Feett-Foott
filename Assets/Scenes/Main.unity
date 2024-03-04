@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028426, g: 0.2257148, b: 0.30692393, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028432, g: 0.22571486, b: 0.30692342, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -316,7 +316,7 @@ GameObject:
   m_Component:
   - component: {fileID: 213623976}
   - component: {fileID: 213623977}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: DirectionalArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -663,6 +663,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: 3D RightArrow 1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9839aa5c6869a7e4a8b0510d34b3e9f3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -896,6 +901,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 5f58414bdf563ca4a9b033ba87bb04a2, type: 2}
+    - target: {fileID: 6339021546914683397, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 96
+      objectReference: {fileID: 0}
     - target: {fileID: 6701282639996193177, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
       propertyPath: m_Enabled
@@ -2292,6 +2302,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: f5355f94e54ff4a44aaf331ea88c4ade, type: 2}
+    - target: {fileID: 6339021546914683397, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 160
+      objectReference: {fileID: 0}
     - target: {fileID: 6701282639996193177, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
       propertyPath: m_Enabled
@@ -2996,7 +3011,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 9bd41e01ae1541f4eb38388897df79c8,
         type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3562,7 +3577,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1816620299}
   - component: {fileID: 1816620300}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DirectionalArrow2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
