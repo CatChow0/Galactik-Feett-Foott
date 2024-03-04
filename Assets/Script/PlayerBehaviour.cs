@@ -95,29 +95,7 @@ public class PlayerBehaviour : MonoBehaviour
             rb.AddForce(transform.up * jumpForce);
         }
 
-        // Gestion du jetpack
-        if (jetpack && energyAmount >= jetpackEnergy)
-        {
-            if (!jetpackUsed && energyAmount >= (jetpackMinEnergy * 2))
-            {
-                energyAmount -= jetpackMinEnergy;
-                jetpackUsed = true;
-            }
-
-            if (jetpackUsed)
-            {
-                rb.AddForce(transform.up * jetpackForce);
-                energyAmount -= jetpackEnergy * Time.deltaTime * jetpackMultiplier;
-            }
-        }
-        else
-        {
-            if (jetpackUsed)
-            {
-                jetpackUsed = false;
-                jetpackCooldown = true;
-            }
-        }
+        JetpackManager();
 
         if (dash && energyAmount >= dashEnergy)
         {
@@ -258,6 +236,33 @@ public class PlayerBehaviour : MonoBehaviour
         //Debug.Log("Collision leave with ground");
 
         jumpAllow = false;
+    }
+
+    // Gestion du jetpack
+    private void JetpackManager()
+    {
+        if (jetpack && energyAmount >= jetpackEnergy)
+        {
+            if (!jetpackUsed && energyAmount >= (jetpackMinEnergy * 2))
+            {
+                energyAmount -= jetpackMinEnergy;
+                jetpackUsed = true;
+            }
+
+            if (jetpackUsed)
+            {
+                rb.AddForce(transform.up * jetpackForce);
+                energyAmount -= jetpackEnergy * Time.deltaTime * jetpackMultiplier;
+            }
+        }
+        else
+        {
+            if (jetpackUsed)
+            {
+                jetpackUsed = false;
+                jetpackCooldown = true;
+            }
+        }
     }
 
     private void Dash()
