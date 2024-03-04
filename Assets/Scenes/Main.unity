@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028432, g: 0.22571486, b: 0.30692342, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028426, g: 0.2257148, b: 0.30692393, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -948,9 +948,104 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
+      propertyPath: energyAmount
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
       propertyPath: energySlider
       value: 
       objectReference: {fileID: 2032286627}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: jetpackEnergy
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: jetpackEnergy2
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenTime
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: maxEnergyAmount
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: jetpackMinEnergy
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: jetpackMultiplier
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCooldown
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[0].inSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[1].inSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[0].outSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[1].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[1].outSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[0].outWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[0].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[1].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
     - target: {fileID: 7721783544866018370, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
       propertyPath: m_Name
@@ -2246,6 +2341,86 @@ PrefabInstance:
         type: 3}
       propertyPath: dashDuration
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyAmount
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: jetpackEnergy
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenTime
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: maxEnergyAmount
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: jetpackMinEnergy
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: jetpackMultiplier
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCooldown
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[0].inSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[1].inSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[0].outSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[1].outSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[0].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794485858258545965, guid: f35de65aacd60aa4f84177828c0f6392,
+        type: 3}
+      propertyPath: energyRegenCurve.m_Curve.Array.data[1].tangentMode
+      value: 34
       objectReference: {fileID: 0}
     - target: {fileID: 7721783544866018370, guid: f35de65aacd60aa4f84177828c0f6392,
         type: 3}
