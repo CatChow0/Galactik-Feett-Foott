@@ -13,7 +13,6 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private float maxSlowSpeed;
     [SerializeField] private float angularSpeed;
     [SerializeField] private float jumpForce;
-    [SerializeField] private float jetpackForce;
     [SerializeField] public int id;
     [SerializeField] private int fov;
     [SerializeField] private Camera cam;
@@ -22,6 +21,20 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private float dashDuration;
     [SerializeField] private float dashForce;
     [SerializeField] private float dashFov;
+    [SerializeField] private float dashEnergy;
+
+    [Header("Player Jetpack settings")]
+    [SerializeField] private float jetpackForce;
+    [SerializeField] private float jetpackMinEnergy;
+    [SerializeField] private float jetpackEnergy;
+    [SerializeField] private float jetpackMultiplier;
+
+    [Header("Player Energy settings")]
+    [SerializeField] private float energyAmount;
+    [SerializeField] private float maxEnergyAmount; // Ajoutez une nouvelle variable pour le montant maximum d'ï¿½nergie
+    [SerializeField] private AnimationCurve energyRegenCurve; // Ajoutez une courbe d'animation pour contrï¿½ler la vitesse de rï¿½gï¿½nï¿½ration
+    [SerializeField] private float energyRegenTime;
+    [SerializeField] private float energyRegenCooldown;
 
     [Header("Grapple Hook Settings")]
     [SerializeField] private float grappleSpeed;
@@ -37,6 +50,8 @@ public class PlayerBehaviour : MonoBehaviour
     private Rigidbody rb;
     float hor, vert, currentSpeed;
     bool slow, jump, jetpack, jumpAllow, dash, grappleHook;
+    private bool jetpackUsed = false;
+    private bool jetpackCooldown = false;
 
     private void Awake()
     {
@@ -47,7 +62,7 @@ public class PlayerBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        StartCoroutine(RegenEnergy());
     }
 
     // Update is called once per frame
@@ -81,14 +96,33 @@ public class PlayerBehaviour : MonoBehaviour
         }
 
         // Gestion du jetpack
-        if (jetpack)
+        if (jetpack && energyAmount >= jetpackEnergy)
         {
-            rb.AddForce(transform.up * jetpackForce);
+            if (!jetpackUsed && energyAmount >= (jetpackMinEnergy * 2))
+            {
+                energyAmount -= jetpackMinEnergy;
+                jetpackUsed = true;
+            }
+
+            if (jetpackUsed)
+            {
+                rb.AddForce(transform.up * jetpackForce);
+                energyAmount -= jetpackEnergy * Time.deltaTime * jetpackMultiplier;
+            }
+        }
+        else
+        {
+            if (jetpackUsed)
+            {
+                jetpackUsed = false;
+                jetpackCooldown = true;
+            }
         }
 
-        if (dash)
+        if (dash && energyAmount >= dashEnergy)
         {
             Dash();
+            energyAmount -= dashEnergy;
         }
 
         if (grappleHook)
@@ -106,9 +140,9 @@ public class PlayerBehaviour : MonoBehaviour
 
         if (isGrappling)
         {
-            // Fait pivoter le joueur vers la balle de manière douce
+            // Fait pivoter le joueur vers la balle de maniï¿½re douce
             Quaternion targetRotation = Quaternion.LookRotation(targetBall.transform.position - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * grappleSpeed * 0.1f); // réduit la vitesse de rotation du joueur
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * grappleSpeed * 0.1f); // rï¿½duit la vitesse de rotation du joueur
 
             grappleObject.SetActive(true);
 
@@ -127,7 +161,7 @@ public class PlayerBehaviour : MonoBehaviour
             // Rotation du joueur
             transform.Rotate(transform.up, angularSpeed * hor);
 
-            // Rétablit la rotation initiale du joueur en x et z
+            // Rï¿½tablit la rotation initiale du joueur en x et z
             Quaternion currentRotation = transform.rotation;
             transform.rotation = Quaternion.Euler(initialRotation.eulerAngles.x, currentRotation.eulerAngles.y, initialRotation.eulerAngles.z);
 
@@ -197,7 +231,7 @@ public class PlayerBehaviour : MonoBehaviour
         {
             isGrappling = false;
 
-            // Ajoute une force à la balle dans la direction du mouvement du joueur
+            // Ajoute une force ï¿½ la balle dans la direction du mouvement du joueur
             Rigidbody ballRigidbody = targetBall.GetComponent<Rigidbody>();
             Vector3 pushDirection = (targetBall.transform.position - transform.position).normalized;
             ballRigidbody.AddForce(pushDirection * grappleSpeed, ForceMode.Impulse);
@@ -254,6 +288,29 @@ public class PlayerBehaviour : MonoBehaviour
         cam.DOFieldOfView(end_value, 0.15f);
     }
 
+    private IEnumerator RegenEnergy()
+    {
+        while (true)
+        {
+            // Si l'ï¿½nergie n'est pas ï¿½ son maximum et que le jetpack n'est pas utilisï¿½ ou que l'ï¿½nergie est infï¿½rieure ï¿½ la limite minimale pour le jetpack, et que le cooldown du jetpack est terminï¿½
+            if (energyAmount < maxEnergyAmount && (!jetpack || energyAmount < jetpackMinEnergy * 2) && !jetpackCooldown)
+            {
+                float regenAmount = energyRegenCurve.Evaluate(energyAmount / maxEnergyAmount);
+                energyAmount += regenAmount;
+                if (energyAmount > maxEnergyAmount)
+                {
+                    energyAmount = maxEnergyAmount;
+                }
+            }
+            else if (jetpackCooldown)
+            {
+                yield return new WaitForSeconds(energyRegenCooldown); // Attendez x secondes avant de rï¿½initialiser le cooldown
+                jetpackCooldown = false;
+            }
+            yield return new WaitForSeconds(energyRegenTime);
+        }
+    }
+
     public int GetID()
     {
         return id;
@@ -261,7 +318,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void Grapple()
     {
-        // Vérifie si la balle est à portée
+        // Vï¿½rifie si la balle est ï¿½ portï¿½e
         if (Vector3.Distance(transform.position, targetBall.transform.position) >= grappleMinRange)
         {
             // Grapple
