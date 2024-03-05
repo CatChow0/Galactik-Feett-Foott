@@ -31,8 +31,8 @@ public class PlayerBehaviour : MonoBehaviour
 
     [Header("Player Energy settings")]
     [SerializeField] private float energyAmount;
-    [SerializeField] private float maxEnergyAmount; // Ajoutez une nouvelle variable pour le montant maximum d'�nergie
-    [SerializeField] private AnimationCurve energyRegenCurve; // Ajoutez une courbe d'animation pour contr�ler la vitesse de r�g�n�ration
+    [SerializeField] private float maxEnergyAmount;
+    [SerializeField] private AnimationCurve energyRegenCurve;
     [SerializeField] private float energyRegenTime;
     [SerializeField] private float energyRegenCooldown;
 
@@ -45,13 +45,15 @@ public class PlayerBehaviour : MonoBehaviour
 
     private bool isGrappling;
     private Quaternion initialRotation;
-
-    // Initialisation des variables
     private Rigidbody rb;
     float hor, vert, currentSpeed;
     bool slow, jump, jetpack, jumpAllow, dash, grappleHook;
     private bool jetpackUsed = false;
     private bool jetpackCooldown = false;
+    private bool dashUsed = false;
+    private bool newDashUsed = false;
+    private int i = 0;
+    private bool dashing = false;
 
     private void Awake()
     {
@@ -97,11 +99,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         JetpackManager();
 
-        if (dash && energyAmount >= dashEnergy)
-        {
-            Dash();
-            energyAmount -= dashEnergy;
-        }
+        DashManager();
 
         if (grappleHook)
         {
@@ -265,15 +263,27 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
-    private void Dash()
+    private void DashManager()
     {
-        Debug.Log("Dash");
-        // Recupere la direction du joueur et ajoute une force dans cette direction pour le dash et utilise une coroutine pour le temps de dash et un lerp pour la vitesse
-        Vector3 dashDirection = transform.forward;
-        rb.AddForce(dashDirection * dashForce, ForceMode.Impulse);
-        // set la fov de la camera a 120 en utilisant un lerp
-        StartCoroutine(DashTime());
-        DoFov(dashFov);
+        if (dash && energyAmount >= dashEnergy)
+        {
+            Debug.Log("Dash");
+            if (dashUsed)
+            {
+                newDashUsed = true;
+            }
+            else if (!dashUsed)
+            {
+                dashUsed = true;
+            }
+            // Recupere la direction du joueur et ajoute une force dans cette direction pour le dash et utilise une coroutine pour le temps de dash et un lerp pour la vitesse
+            Vector3 dashDirection = transform.forward;
+            rb.AddForce(dashDirection * dashForce, ForceMode.Impulse);
+            // set la fov de la camera a 120 en utilisant un lerp
+            StartCoroutine(DashTime());
+            energyAmount -= dashEnergy;
+            DoFov(dashFov);
+        }
     }
 
     private IEnumerator DashTime()
@@ -298,7 +308,7 @@ public class PlayerBehaviour : MonoBehaviour
         while (true)
         {
             // Si l'�nergie n'est pas � son maximum et que le jetpack n'est pas utilis� ou que l'�nergie est inf�rieure � la limite minimale pour le jetpack, et que le cooldown du jetpack est termin�
-            if (energyAmount < maxEnergyAmount && (!jetpack || energyAmount < jetpackMinEnergy * 2) && !jetpackCooldown)
+            if (energyAmount < maxEnergyAmount && ((!jetpack || energyAmount < jetpackMinEnergy * 2) && !jetpackCooldown) && (!dashUsed))
             {
                 float regenAmount = energyRegenCurve.Evaluate(energyAmount / maxEnergyAmount);
                 energyAmount += regenAmount;
@@ -307,10 +317,23 @@ public class PlayerBehaviour : MonoBehaviour
                     energyAmount = maxEnergyAmount;
                 }
             }
-            else if (jetpackCooldown)
+            else if (jetpackCooldown || dashUsed)
             {
-                yield return new WaitForSeconds(energyRegenCooldown); // Attendez x secondes avant de r�initialiser le cooldown
+                
+                if (!newDashUsed)
+                {
+                    Debug.Log(i++);
+                    Debug.Log("Cooldown Start");
+                    yield return new WaitForSeconds(energyRegenCooldown); // Attendez x secondes avant de r�initialiser le cooldown
+                    Debug.Log("Cooldown Finished");
+                }
+                if (newDashUsed)
+                {
+                    yield return new WaitForSeconds(energyRegenCooldown);
+                    newDashUsed = false;
+                }
                 jetpackCooldown = false;
+                dashUsed = false;
             }
             yield return new WaitForSeconds(energyRegenTime);
         }
