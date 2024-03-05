@@ -49,20 +49,25 @@ public class PlayerBehaviour : MonoBehaviour
     // Initialisation des variables
     private Rigidbody rb;
     float hor, vert, currentSpeed;
-    bool slow, jump, jetpack, jumpAllow, dash, grappleHook;
+    bool slow, jump, jetpack, jumpAllow, dash, grappleHook, droneShoot;
     private bool jetpackUsed = false;
     private bool jetpackCooldown = false;
+
+    DroneAI droneAI;
 
     private void Awake()
     {
         // Recuperation du rigidbody
         rb = GetComponent<Rigidbody>();
+        
     }
 
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(RegenEnergy());
+
+        droneAI = FindObjectOfType<DroneAI>();
     }
 
     // Update is called once per frame
@@ -78,6 +83,7 @@ public class PlayerBehaviour : MonoBehaviour
             slow = Input.GetButton("Slow1");
             dash = Input.GetButtonDown("Dash1");
             grappleHook = Input.GetButtonDown("GrappleHook");
+            droneShoot = Input.GetButtonDown("DroneShoot");
         }
         else if (id == 2)
         {
@@ -92,7 +98,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         if (jump && jumpAllow)
         {
-            rb.AddForce(transform.up * jumpForce);
+            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
 
         JetpackManager();
@@ -114,6 +120,11 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 Grapple();
             }
+        }
+
+        if(droneShoot)
+        {
+            droneAI.ShootProjectile();
         }
 
         if (isGrappling)

@@ -293,14 +293,28 @@ MonoBehaviour:
   maxSpeed: 100
   maxSlowSpeed: 62.5
   angularSpeed: 0.85
-  jumpForce: 2500
-  jetpackForce: 50
+  jumpForce: 50
   id: 0
   fov: 60
   cam: {fileID: 0}
   dashDuration: 0.1
   dashForce: 500
   dashFov: 70
+  dashEnergy: 0
+  jetpackForce: 50
+  jetpackMinEnergy: 0
+  jetpackEnergy: 0
+  jetpackMultiplier: 0
+  energyAmount: 0
+  maxEnergyAmount: 0
+  energyRegenCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  energyRegenTime: 0
+  energyRegenCooldown: 0
   grappleSpeed: 250
   grappleMinRange: 30
   targetBall: {fileID: 0}

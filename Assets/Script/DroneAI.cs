@@ -3,102 +3,100 @@ using UnityEngine;
 
 public class DroneAI : MonoBehaviour
 {
-    public Transform ball;
-    public float moveSpeed = 2f;
-    public float wanderRadius = 5f;
-    public float retrieveProbability = 0.2f; // Probability of retrieving the ball (0 to 1)
-    public float delayAfterTouching = 0.5f;
+    [Header("Drone Settings")]
+    [SerializeField] private float speed = 5f;
+    [SerializeField] private Ball ball; // La balle que le drone va chercher
+    [SerializeField] private float actionIntervalMin = 10f; // Intervalle minimum entre les actions
+    [SerializeField] private float actionIntervalMax = 21f; // Intervalle maximum entre les actions
+    [SerializeField] private LayerMask wallMask; // LayerMask pour identifier les murs
 
-    private Vector3 initialPosition;
-    private Vector3 targetPosition;
+    [Header("Projectile Settings")]
+    [SerializeField] private float projectileSpeed = 10f; // Vitesse du projectile
+    [SerializeField] private GameObject projectilePrefab; // Préfab du projectile
 
-    private bool isReturning;
 
-    void Start()
+    private Vector3 targetPoint; // Le point cible actuel du drone
+    private Rigidbody rb;
+
+    private void Start()
     {
-        initialPosition = transform.position;
-        StartCoroutine(WanderAround());
+        rb = GetComponent<Rigidbody>();
+        GenerateTargetPoint(); // Génère un premier point cible
+        StartCoroutine(PerformAction());
     }
 
-    IEnumerator WanderAround()
+    private void Update()
+    {
+        MoveDrone();
+    }
+
+    private void MoveDrone()
+    {
+        // Si le drone est proche du point cible, génère un nouveau point cible
+        if (Vector3.Distance(transform.position, targetPoint) < 1f)
+        {
+            GenerateTargetPoint();
+        }
+
+        // Si le chemin vers le point cible est bloqué par un mur, génère un nouveau point cible
+        if (Physics.Raycast(transform.position, targetPoint - transform.position, Vector3.Distance(transform.position, targetPoint), wallMask))
+        {
+            GenerateTargetPoint();
+        }
+
+        // Déplace le drone vers le point cible à une vitesse constante
+        Vector3 direction = (targetPoint - transform.position).normalized;
+        rb.velocity = direction * speed;
+
+        // Si le drone est sur le point de traverser un mur, arrête le drone
+        if (Physics.Raycast(transform.position, rb.velocity, speed * Time.deltaTime, wallMask))
+        {
+            rb.velocity = Vector3.zero;
+        }
+    }
+
+    private void GenerateTargetPoint()
+    {
+        // Génère un point cible aléatoire dans la zone de déplacement du drone
+        float x = Random.Range(0, 80);
+        float y = transform.position.y; // Garde la même hauteur
+        float z = Random.Range(0, 100);
+
+        targetPoint = new Vector3(x, y, z);
+    }
+
+    public void ShootProjectile()
+    {
+        // Instancie un nouveau projectile
+        GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+
+        // Donne une vitesse au projectile dans la direction de la balle
+        Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
+        Vector3 direction = (ball.transform.position - transform.position).normalized;
+        projectileRb.velocity = direction * projectileSpeed;
+    }
+
+    private void FetchBall()
+    {
+        // Fait aller chercher la balle par le drone
+        // Vous devrez remplir cette méthode avec votre propre logique de récupération de balle
+    }
+
+    private IEnumerator PerformAction()
     {
         while (true)
         {
-            if (Random.value < retrieveProbability)
+            yield return new WaitForSeconds(Random.Range(actionIntervalMin, actionIntervalMax));
+
+            // Choisit aléatoirement entre tirer un projectile et aller chercher la balle
+            if (Random.value < 0.5f)
             {
-                yield return StartCoroutine(RetrieveAndReplaceBall());
+                ShootProjectile();
             }
-            yield return StartCoroutine(MoveToRandomPosition());
-        }
-    }
-
-    IEnumerator MoveToRandomPosition()
-    {
-        Vector3 startPosition = transform.position;
-        targetPosition = initialPosition + Random.insideUnitSphere * wanderRadius;
-        targetPosition.y = startPosition.y; // Keep the same height
-
-        float journeyLength = Vector3.Distance(startPosition, targetPosition);
-        float startTime = Time.time;
-
-        while (transform.position != targetPosition)
-        {
-            float distanceCovered = (Time.time - startTime) * moveSpeed;
-            float fractionOfJourney = distanceCovered / journeyLength;
-            transform.position = Vector3.Lerp(startPosition, targetPosition, fractionOfJourney);
-            yield return null;
-        }
-    }
-
-    IEnumerator RetrieveAndReplaceBall()
-    {
-        // Move towards the ball
-        yield return StartCoroutine(MoveToRandomPosition());
-
-        // Retrieve the ball
-        RetrieveBall();
-
-        // Wait before placing the ball
-        yield return new WaitForSeconds(delayAfterTouching);
-
-        // Place the ball at a random position
-        ReplaceBallRandomly();
-
-        // Move back to initial position
-        yield return StartCoroutine(MoveToInitialPosition());
-    }
-
-    void RetrieveBall()
-    {
-        targetPosition = ball.position;
-        transform.position = targetPosition;
-
-        Rigidbody ballRb = ball.GetComponent<Rigidbody>();
-        if (ballRb != null)
-        {
-            ballRb.useGravity = false;
-        }
-    }
-
-    void ReplaceBallRandomly()
-    {
-        Vector3 randomPos = Random.insideUnitSphere * wanderRadius;
-        randomPos.y = ball.position.y; // Keep the same height
-        ball.position = randomPos;
-    }
-
-    IEnumerator MoveToInitialPosition()
-    {
-        Vector3 startPosition = transform.position;
-        float journeyLength = Vector3.Distance(startPosition, initialPosition);
-        float startTime = Time.time;
-
-        while (transform.position != initialPosition)
-        {
-            float distanceCovered = (Time.time - startTime) * moveSpeed;
-            float fractionOfJourney = distanceCovered / journeyLength;
-            transform.position = Vector3.Lerp(startPosition, initialPosition, fractionOfJourney);
-            yield return null;
+            else
+            {
+                FetchBall();
+            }
         }
     }
 }
