@@ -67,14 +67,26 @@ public class DroneAI : MonoBehaviour
 
     public void ShootProjectile()
     {
+        // Donne une vitesse au projectile dans la direction de la balle
+        Vector3 direction = (ball.transform.position - transform.position).normalized;
+
         // Instancie un nouveau projectile
         GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
 
-        // Donne une vitesse au projectile dans la direction de la balle
+        // Ajuste la rotation du projectile pour que l'axe X pointe vers la balle
+        projectile.transform.rotation = Quaternion.FromToRotation(Vector3.right, direction);
+
+        // Applique la vitesse au projectile
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
-        Vector3 direction = (ball.transform.position - transform.position).normalized;
         projectileRb.velocity = direction * projectileSpeed;
+
+        DroneProjectileBehaviour projectileBehaviour = projectile.GetComponent<DroneProjectileBehaviour>();
+        if (projectileBehaviour != null)
+        {
+            projectileBehaviour.ball = ball;
+        }
     }
+
 
     private void FetchBall()
     {

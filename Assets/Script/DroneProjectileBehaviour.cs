@@ -4,15 +4,33 @@ using UnityEngine;
 
 public class DroneProjectileBehaviour : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    public Ball ball; // La balle que le projectile va suivre
+
+    private Rigidbody rb;
+    private float speed;
+
+    private void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
+        speed = rb.velocity.magnitude;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        // Change la direction du projectile pour pointer vers la balle
+        Vector3 direction = (ball.transform.position - transform.position).normalized;
+        rb.velocity = direction * speed;
     }
+
+    //On collision with ball destroy self and push the ball
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("Ball"))
+        {
+            collision.rigidbody.AddForce(transform.forward * 20, ForceMode.Impulse);
+        }
+        Destroy(gameObject);
+    }
+
 }
