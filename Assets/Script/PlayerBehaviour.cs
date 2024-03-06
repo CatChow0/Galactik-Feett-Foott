@@ -58,6 +58,7 @@ public class PlayerBehaviour : MonoBehaviour
     private bool jetpackUsed = false;
     private bool newJetpackUsed = false;
     private bool jetpackCooldown = false;
+    private bool grappleUsed = false;
     private bool dashUsed = false;
     private bool newDashUsed = false;
     private bool start = false;
@@ -65,7 +66,9 @@ public class PlayerBehaviour : MonoBehaviour
     public float defaultEnergy;
 
     Image handleImage = null;
+    Image handleFill = null;
     RectTransform handleTransform = null;
+    RectTransform handleFillTransform = null;
 
     private void Awake()
     {
@@ -238,12 +241,14 @@ public class PlayerBehaviour : MonoBehaviour
                 CooldownRemainingTime = 0;
                 newDashUsed = false;
                 newJetpackUsed = false;
+                grappleUsed = false;
                 //Debug.Log("Restart Countdown");
             }
             if (CooldownRemainingTime >= energyRegenCooldown)
             {
                 jetpackCooldown = false;
                 dashUsed = false;
+                grappleUsed = false;
                 start = false;
             }
             else if (CooldownRemainingTime < energyRegenCooldown)
@@ -265,7 +270,7 @@ public class PlayerBehaviour : MonoBehaviour
         while (true)
         {
             // Si l'energie n'est pas a son maximum et que le jetpack n'est pas utilise ou que l'energie est inferieure a la limite minimale pour le jetpack, et que le cooldown du jetpack est termine
-            if (energyAmount < maxEnergyAmount && ((!jetpack || energyAmount < jetpackMinEnergy * 2) && !jetpackCooldown && !newJetpackUsed) && !dashUsed)
+            if (energyAmount < maxEnergyAmount && ((!jetpack || energyAmount < jetpackMinEnergy * 2) && !jetpackCooldown && !newJetpackUsed) && !dashUsed && !grappleUsed)
             {
                 float regenAmount = energyRegenCurve.Evaluate(energyAmount / maxEnergyAmount);
                 energyAmount += regenAmount;
@@ -292,7 +297,10 @@ public class PlayerBehaviour : MonoBehaviour
                     restart = true;
                 }
             }
-
+            else if (grappleUsed)
+            {
+                start = true;
+            }
             yield return new WaitForSeconds(energyRegenTime);
         }
     }
@@ -308,6 +316,9 @@ public class PlayerBehaviour : MonoBehaviour
     {
         Transform handleFile = transform.Find("Canvas/Slider/Handle Slide Area/Handle");
         Transform handleTransformFile = transform.Find("Canvas/Slider/Handle Slide Area");
+        Transform handleFillTransformFile = transform.Find("Canvas/Slider/Fill Area");
+        Transform handleFillFile = transform.Find("Canvas/Slider/Fill Area/Fill");
+
         if (handleTransformFile != null)
         {
             handleTransform = handleTransformFile.GetComponent<RectTransform>();
@@ -316,6 +327,7 @@ public class PlayerBehaviour : MonoBehaviour
         {
             Debug.LogError("Handle Transform not found");
         }
+
         if (handleFile != null)
         {
             //Debug.Log("Handle image found");
@@ -325,6 +337,26 @@ public class PlayerBehaviour : MonoBehaviour
         {
             Debug.LogError("Handle image not found");
         }
+
+        if (handleFillTransformFile != null)
+        {
+            //Debug.Log("Fill Area found");
+            handleFillTransform = handleFile.GetComponent<RectTransform>();
+        }
+        else if (handleFillTransform == null)
+        {
+            Debug.LogError("Handle Fill Transform not found");
+        }
+
+        if (handleFillTransform != null)
+        {
+            //Debug.Log("Fill image found");
+            handleFill = handleFillFile.GetComponent<Image>();
+        }
+        else if (handleFill == null)
+        {
+            Debug.LogError("Handle Fill not found");
+        }
     }
 
     // Met a jour le slider de l'energie
@@ -333,8 +365,13 @@ public class PlayerBehaviour : MonoBehaviour
         if (handleTransform != null && handleImage != null)
         {
             float handlePosition = (energyAmount / maxEnergyAmount) * handleTransform.rect.height;
-            handleImage.rectTransform.anchoredPosition = new Vector2(handleImage.rectTransform.anchoredPosition.x, handleTransform.anchoredPosition.y - handlePosition);
+            handleImage.rectTransform.anchoredPosition = new Vector2(handleImage.rectTransform.anchoredPosition.x, -handlePosition);
             //Debug.Log("Handle position : " + handlePosition);
+
+            float fillAmount = handlePosition + 10;
+            float fillPosition = handlePosition / 2;
+            handleFill.rectTransform.sizeDelta = new Vector2(handleFill.rectTransform.sizeDelta.x, fillAmount);
+            handleFill.rectTransform.anchoredPosition = new Vector2(handleFill.rectTransform.anchoredPosition.x, handleTransform.anchoredPosition.y - fillPosition);
         }
     }
 
@@ -384,11 +421,13 @@ public class PlayerBehaviour : MonoBehaviour
                 isGrappling = false;
             }
             // Verifie si la balle est a portee
-            else if (Vector3.Distance(transform.position, targetBall.transform.position) >= grappleMinRange)
+            else if ((Vector3.Distance(transform.position, targetBall.transform.position) >= grappleMinRange) && energyAmount >= maxEnergyAmount)
             {
                 // Grapple
                 isGrappling = true;
                 initialRotation = transform.rotation;
+                energyAmount -= maxEnergyAmount;
+                grappleUsed = true;
             }
         }
 
