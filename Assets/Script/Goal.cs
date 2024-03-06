@@ -27,7 +27,8 @@ public class Goal : MonoBehaviour
         if (collision.transform.CompareTag("Ball"))
         {
             // Play goal particle
-            goalParticle.startColor = ball.lastPlayerTouchId == 1 ? Color.green : Color.blue;
+            var main = goalParticle.main;
+            main.startColor = ball.lastPlayerTouchId == 1 ? Color.green : Color.blue;
             goalParticle.Play();
             GameManager.GetInstance().ScorePoint(playerID);
         }

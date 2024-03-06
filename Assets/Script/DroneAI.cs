@@ -25,6 +25,7 @@ public class DroneAI : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         GenerateTargetPoint(); // Génère un premier point cible
+        FetchBall(); // Le drone va chercher la balle au début du match
         StartCoroutine(PerformAction());
     }
 
@@ -132,9 +133,16 @@ public class DroneAI : MonoBehaviour
         {
             Vector3 descendPosition = new Vector3(ball.transform.position.x, ball.transform.position.y + 1.5f, ball.transform.position.z);
             Vector3 direction = (descendPosition - transform.position).normalized;
+
+            // Si un mur est détecté devant le drone, modifie la direction de mouvement du drone
+            if (Physics.Raycast(transform.position, direction, speed * Time.deltaTime, wallMask))
+            {
+                direction = Vector3.Cross(direction, Vector3.up); // Se déplace parallèlement au mur
+            }
+
             rb.velocity = direction * speed;
 
-            if (Vector3.Distance(transform.position, descendPosition) < 0.1f)
+            if (Vector3.Distance(transform.position, descendPosition) < 0.5f)
             {
                 // Si le drone est suffisamment proche de la balle, sort de la boucle
                 break;
@@ -149,7 +157,7 @@ public class DroneAI : MonoBehaviour
 
         // Le drone retourne au centre de la carte
         Vector3 centerPosition = new Vector3(40, initialHeight, 50);
-        while (Vector3.Distance(transform.position, centerPosition) > 0.1f)
+        while (Vector3.Distance(transform.position, centerPosition) > 1f) // Augmente la marge d'erreur à 1f
         {
             Vector3 direction = (centerPosition - transform.position).normalized;
             rb.velocity = direction * speed;
@@ -159,6 +167,7 @@ public class DroneAI : MonoBehaviour
 
             yield return null;
         }
+
 
         // Le drone lâche la balle
         ball.GetComponent<Rigidbody>().isKinematic = false;

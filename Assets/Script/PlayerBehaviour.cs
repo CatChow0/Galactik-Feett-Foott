@@ -450,6 +450,7 @@ public class PlayerBehaviour : MonoBehaviour
                 //Debug.Log("Walking Reverse");
                 currentSpeed = -maxSlowSpeed;
             }
+
         }
         // Deplacement du joueur en temps normal
         else
@@ -468,4 +469,5 @@ public class PlayerBehaviour : MonoBehaviour
         // Rotation du joueur
         transform.Rotate(transform.up, angularSpeed * hor);
     }
+
 }
