@@ -13,6 +13,8 @@ public class Ball : MonoBehaviour
     public int lastPlayerTouchId;
     private Rigidbody rb;
 
+    public AudioSource BouncePlayer;
+
     private void Awake()
     {
         // Recuperation du rigidbody
@@ -51,10 +53,8 @@ public class Ball : MonoBehaviour
 
             // Ajoute une force à la balle
             rb.AddForce((transform.position - collision.transform.position).normalized * pushForce * (collision.rigidbody.velocity.magnitude / 7.5f));
-
-            
         }
-       
+        BouncePlayer.Play();
     }
 
     private void OnCollisionStay(Collision collision)
