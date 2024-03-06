@@ -6,19 +6,20 @@ public class DroneAI : MonoBehaviour
     [Header("Drone Settings")]
     [SerializeField] private float speed = 5f;
     [SerializeField] private Ball ball; // La balle que le drone va chercher
-    [SerializeField] private float actionIntervalMin = 10f; // Intervalle minimum entre les actions
-    [SerializeField] private float actionIntervalMax = 21f; // Intervalle maximum entre les actions
-    [SerializeField] private LayerMask wallMask; // LayerMask pour identifier les murs
+    [SerializeField] private float actionIntervalMin = 10f;
+    [SerializeField] private float actionIntervalMax = 21f;
+    [SerializeField] private LayerMask wallMask;
 
     [Header("Projectile Settings")]
-    [SerializeField] private float projectileSpeed = 10f; // Vitesse du projectile
-    [SerializeField] private GameObject projectilePrefab; // Préfab du projectile
+    [SerializeField] private float projectileSpeed = 10f;
+    [SerializeField] private GameObject projectilePrefab;
 
+    [Header("Fetch Ball Settings")]
+    [SerializeField] private float throwForce = 10f;
 
-    private Vector3 targetPoint; // Le point cible actuel du drone
+    private Vector3 targetPoint;
     private Rigidbody rb;
-    private Vector3 initialPosition; // La position initiale du drone
-    private bool isFetchingBall = false; // Si le drone est en train de récupérer la balle
+    private bool isFetchingBall;
 
     private void Start()
     {
@@ -93,7 +94,7 @@ public class DroneAI : MonoBehaviour
     }
 
 
-    private void FetchBall()
+    public void FetchBall()
     {
         StartCoroutine(FetchBallCoroutine());
     }
@@ -101,47 +102,80 @@ public class DroneAI : MonoBehaviour
     private IEnumerator FetchBallCoroutine()
     {
         isFetchingBall = true;
+        // Stocke la hauteur initiale du drone
+        float initialHeight = transform.position.y;
 
-        // Déplace le drone au-dessus de la balle
-        Vector3 aboveBallPosition = new Vector3(ball.transform.position.x, ball.transform.position.y + 1, ball.transform.position.z);
-        while (Vector3.Distance(transform.position, aboveBallPosition) > 0.1f)
+        // Le drone se place au-dessus de la balle mais conserve sa hauteur
+        while (true)
         {
+            Vector3 aboveBallPosition = new Vector3(ball.transform.position.x, transform.position.y, ball.transform.position.z);
             Vector3 direction = (aboveBallPosition - transform.position).normalized;
-            rb.velocity = direction * speed;
+            float distance = Vector3.Distance(transform.position, aboveBallPosition);
+
+            if (distance > 0.1f)
+            {
+                // Si le drone est loin de la balle, il se déplace à sa vitesse maximale
+                rb.velocity = direction * speed;
+            }
+            else
+            {
+                // Si le drone est proche de la balle, il adapte sa vitesse pour correspondre à celle de la balle
+                float ballSpeed = ball.GetComponent<Rigidbody>().velocity.magnitude;
+                rb.velocity = direction * ballSpeed;
+                break; // Sort de la boucle une fois que le drone est au-dessus de la balle
+            }
             yield return null;
         }
 
-        // Ajoute un FixedJoint pour attacher la balle au drone
-        FixedJoint joint = gameObject.AddComponent<FixedJoint>();
-        joint.connectedBody = ball.GetComponent<Rigidbody>();
-
-        // Fait remonter le drone à sa hauteur initiale
-        Vector3 initialHeightPosition = new Vector3(transform.position.x, initialPosition.y, transform.position.z);
-        while (Vector3.Distance(transform.position, initialHeightPosition) > 0.1f)
+        // Le drone descend au-dessus de la balle
+        while (true)
         {
-            Vector3 direction = (initialHeightPosition - transform.position).normalized;
+            Vector3 descendPosition = new Vector3(ball.transform.position.x, ball.transform.position.y + 1.5f, ball.transform.position.z);
+            Vector3 direction = (descendPosition - transform.position).normalized;
             rb.velocity = direction * speed;
+
+            if (Vector3.Distance(transform.position, descendPosition) < 0.1f)
+            {
+                // Si le drone est suffisamment proche de la balle, sort de la boucle
+                break;
+            }
+
             yield return null;
         }
 
-        // Déplace le drone au centre de la carte
-        Vector3 centerPosition = new Vector3(40, initialPosition.y, 50); // Assumant que le centre de la carte est à (40, 50)
+        // Le drone "attache" la balle à lui en la rendant kinematic et en la déplaçant à sa position
+        ball.GetComponent<Rigidbody>().isKinematic = true;
+        ball.transform.position = transform.position + Vector3.down * 1.5f;
+
+        // Le drone retourne au centre de la carte
+        Vector3 centerPosition = new Vector3(40, initialHeight, 50);
         while (Vector3.Distance(transform.position, centerPosition) > 0.1f)
         {
             Vector3 direction = (centerPosition - transform.position).normalized;
             rb.velocity = direction * speed;
+
+            // Déplace la balle à la position du drone
+            ball.transform.position = transform.position + Vector3.down * 1.5f;
+
             yield return null;
         }
 
-        // Relâche la balle avec une force dans une direction aléatoire
-        Vector3 randomDirection = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
-        ball.GetComponent<Rigidbody>().AddForce(randomDirection * 10, ForceMode.Impulse);
+        // Le drone lâche la balle
+        ball.GetComponent<Rigidbody>().isKinematic = false;
 
-        // Supprime le FixedJoint pour détacher la balle du drone
-        Destroy(joint);
+        // Génère un angle aléatoire
+        float angle = Random.Range(0f, 360f);
+
+        // Convertit l'angle en une direction sur le plan xz
+        Vector3 randomDirection = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
+
+        // Applique une force à la balle dans la direction aléatoire
+        ball.GetComponent<Rigidbody>().AddForce(randomDirection * throwForce, ForceMode.Impulse);
 
         isFetchingBall = false;
+
     }
+
 
     private IEnumerator PerformAction()
     {

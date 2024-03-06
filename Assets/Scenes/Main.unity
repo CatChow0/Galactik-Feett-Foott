@@ -2728,6 +2728,7 @@ MonoBehaviour:
   projectileSpeed: 100
   projectilePrefab: {fileID: 6866541598514671979, guid: 949efe901b1c9f9468c279c961d4e4b2,
     type: 3}
+  throwForce: 100
 --- !u!54 &958490482
 Rigidbody:
   m_ObjectHideFlags: 0

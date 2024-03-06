@@ -124,7 +124,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         if(droneShoot)
         {
-            droneAI.ShootProjectile();
+            droneAI.FetchBall();
         }
 
         if (isGrappling)
