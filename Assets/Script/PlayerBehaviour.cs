@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class PlayerBehaviour : MonoBehaviour
 {
@@ -42,6 +43,11 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private Ball targetBall;
     [SerializeField] private GameObject grappleObject;
 
+    [Header("Movement Cooldown Settings")]
+    [SerializeField] private float CooldownRemainingTime;
+    public static Timer CooldownTimer;
+    
+
 
     private bool isGrappling;
     private Quaternion initialRotation;
@@ -49,11 +55,14 @@ public class PlayerBehaviour : MonoBehaviour
     float hor, vert, currentSpeed;
     bool slow, jump, jetpack, jumpAllow, dash, grappleHook;
     private bool jetpackUsed = false;
+    private bool newJetpackUsed = false;
     private bool jetpackCooldown = false;
     private bool dashUsed = false;
     private bool newDashUsed = false;
-    private int i = 0;
-    private bool dashing = false;
+    private bool start = false;
+    private bool restart = false;
+
+
 
     private void Awake()
     {
@@ -100,6 +109,8 @@ public class PlayerBehaviour : MonoBehaviour
         JetpackManager();
 
         DashManager();
+
+        MovementCooldown();
 
         if (grappleHook)
         {
@@ -249,9 +260,10 @@ public class PlayerBehaviour : MonoBehaviour
 
             if (jetpackUsed)
             {
-                rb.AddForce(transform.up * jetpackForce);
-                energyAmount -= jetpackEnergy * Time.deltaTime * jetpackMultiplier;
+                newJetpackUsed = true;
             }
+            rb.AddForce(transform.up * jetpackForce);
+            energyAmount -= jetpackEnergy * Time.deltaTime * jetpackMultiplier;
         }
         else
         {
@@ -303,12 +315,43 @@ public class PlayerBehaviour : MonoBehaviour
         cam.DOFieldOfView(end_value, 0.15f);
     }
 
+    private void MovementCooldown()
+    {
+        if (start)
+        {
+            if (restart)
+            {
+                restart = false;
+                CooldownRemainingTime = 0;
+                newDashUsed = false;
+                newJetpackUsed = false;
+                //Debug.Log("Restart Countdown");
+            }
+            if (CooldownRemainingTime >= energyRegenCooldown)
+            {
+                jetpackCooldown = false;
+                dashUsed = false;
+                start = false;
+            }
+            else if (CooldownRemainingTime < energyRegenCooldown)
+            {
+                CooldownRemainingTime += Time.deltaTime;
+                Debug.Log("Countdown Start");
+            }
+        }
+        else if (!start)
+        {
+            CooldownRemainingTime = 0;
+            start = false;
+        }
+    }
+
     private IEnumerator RegenEnergy()
     {
         while (true)
         {
             // Si l'�nergie n'est pas � son maximum et que le jetpack n'est pas utilis� ou que l'�nergie est inf�rieure � la limite minimale pour le jetpack, et que le cooldown du jetpack est termin�
-            if (energyAmount < maxEnergyAmount && ((!jetpack || energyAmount < jetpackMinEnergy * 2) && !jetpackCooldown) && (!dashUsed))
+            if (energyAmount < maxEnergyAmount && ((!jetpack || energyAmount < jetpackMinEnergy * 2) && !jetpackCooldown && !newJetpackUsed) && (!dashUsed))
             {
                 float regenAmount = energyRegenCurve.Evaluate(energyAmount / maxEnergyAmount);
                 energyAmount += regenAmount;
@@ -317,24 +360,25 @@ public class PlayerBehaviour : MonoBehaviour
                     energyAmount = maxEnergyAmount;
                 }
             }
-            else if (jetpackCooldown || dashUsed)
+            else if (dashUsed && !jetpackCooldown)
             {
-                
-                if (!newDashUsed)
+                start = true;
+                if (newDashUsed || jetpackCooldown)
                 {
-                    Debug.Log(i++);
-                    Debug.Log("Cooldown Start");
-                    yield return new WaitForSeconds(energyRegenCooldown); // Attendez x secondes avant de r�initialiser le cooldown
-                    Debug.Log("Cooldown Finished");
+                    jetpackCooldown = false;
+                    restart = true;
                 }
-                if (newDashUsed)
-                {
-                    yield return new WaitForSeconds(energyRegenCooldown);
-                    newDashUsed = false;
-                }
-                jetpackCooldown = false;
-                dashUsed = false;
             }
+            else if (jetpackCooldown)
+            {
+                start = true;
+                if (newJetpackUsed || dashUsed)
+                {
+                    dashUsed = false;
+                    restart = true;
+                }
+            }
+
             yield return new WaitForSeconds(energyRegenTime);
         }
     }
