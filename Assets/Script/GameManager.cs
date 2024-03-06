@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
         player1.transform.rotation = player1StartPos.rotation;
         player1.GetComponent<Rigidbody>().velocity = Vector3.zero;
         player1.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        player1.GetComponent<PlayerBehaviour>().energyAmount = player1.GetComponent<PlayerBehaviour>().defaultEnergy;
 
         // Récupère le joueur 2 et le place à sa position de départ
         player2StartPos = GameObject.Find("Player2StartPos").transform;
@@ -70,6 +71,7 @@ public class GameManager : MonoBehaviour
         player2.transform.rotation = player2StartPos.rotation;
         player2.GetComponent<Rigidbody>().velocity = Vector3.zero;
         player2.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        player2.GetComponent<PlayerBehaviour>().energyAmount = player2.GetComponent<PlayerBehaviour>().defaultEnergy;
     }
 
     public void RestartGame()
