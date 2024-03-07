@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     private Transform player1StartPos;
     private Transform player2StartPos;
     private bool allowGoal;
-    private bool restart = false;
     private Timer timerInstance;
 
     public GameObject EndGameMenu;
