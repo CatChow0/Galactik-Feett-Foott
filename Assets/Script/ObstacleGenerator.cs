@@ -28,9 +28,24 @@ public class ObstacleGenerator : MonoBehaviour
                 // Instancie l'obstacle à la position calculée
                 GameObject obstacle = Instantiate(obstaclePrefab, point, Quaternion.identity);
 
-                // Assurez-vous que l'obstacle est positionné au-dessus du terrain
-                Vector3 terrainPoint = new Vector3(point.x, terrain.SampleHeight(point) + obstacle.transform.localScale.y / 2f, point.z);
+                // Génère une échelle aléatoire pour l'obstacle
+                float randomScale = Random.Range(2f, 4f);
+                obstacle.transform.localScale = new Vector3(randomScale, randomScale, randomScale);
+
+                // Génère une rotation aléatoire pour l'obstacle
+                float randomRotation = Random.Range(0f, 360f);
+                obstacle.transform.rotation = Quaternion.Euler(0f, randomRotation, 0f);
+
+                // Assurez-vous que l'obstacle est positionné sur le terrain
+                Vector3 terrainPoint = new Vector3(point.x, terrain.SampleHeight(point), point.z);
                 obstacle.transform.position = terrainPoint;
+
+                // Obtenez la normale du terrain à la position de l'obstacle
+                Vector3 terrainNormal = terrain.terrainData.GetInterpolatedNormal(point.x / terrain.terrainData.size.x, point.z / terrain.terrainData.size.z);
+
+                // Orientez l'obstacle pour qu'il suive la forme du terrain
+                obstacle.transform.up = terrainNormal;
+
             }
         }
     }
@@ -62,7 +77,7 @@ public class ObstacleGenerator : MonoBehaviour
             // Génère des coordonnées aléatoires à l'intérieur des limites du terrain
             float randomX = Random.Range(terrainBounds.min.x, terrainBounds.max.x);
             float randomZ = Random.Range(terrainBounds.min.z, terrainBounds.max.z);
-            Vector3 randomPoint = new Vector3(randomX, 0f, randomZ); // Assurez-vous que la hauteur est ajustée plus tard
+            Vector3 randomPoint = new Vector3(randomX, 0f, randomZ);
 
             // Récupérer la hauteur du terrain au point généré
             float terrainHeight = terrain.SampleHeight(randomPoint);
