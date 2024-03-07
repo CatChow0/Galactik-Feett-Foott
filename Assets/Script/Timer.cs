@@ -45,9 +45,12 @@ public class Timer : MonoBehaviour
         {
             CountdownTimer();
         }
-        SaveTimeRemaining();
-        LoadTimeRemaining();
-        FormatTime();
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            SaveTimeRemaining();
+            LoadTimeRemaining();
+            FormatTime();
+        }
     }
 
     public void ResetTimer()
@@ -104,21 +107,23 @@ public class Timer : MonoBehaviour
 
     public void LoadTimeRemaining()
     {
-        if (PlayerPrefs.HasKey("TimeRemaining"))
-        {
-            timeRemaining = PlayerPrefs.GetFloat("TimeRemaining");
-        }
-        else
-        {
-            Debug.LogError("No time remaining has been loaded");
-        }
         if (PlayerPrefs.HasKey("ListIndex"))
         {
             listIndex = PlayerPrefs.GetInt("ListIndex");
         }
         else
         {
-            Debug.LogError("No ListIndex has been loaded");
+            listIndex = 0;
+            //Debug.LogError("No ListIndex has been loaded");
+        }
+        if (PlayerPrefs.HasKey("TimeRemaining"))
+        {
+            timeRemaining = PlayerPrefs.GetFloat("TimeRemaining");
+        }
+        else
+        {
+            timeRemaining = timerList[listIndex];
+            //Debug.LogError("No time remaining has been loaded");
         }
     }
 
@@ -127,8 +132,8 @@ public class Timer : MonoBehaviour
         int minutes = Mathf.FloorToInt(timeRemaining / 60F);
         int seconds = Mathf.FloorToInt(timeRemaining - minutes * 60);
 
-        string niceTime = string.Format("{0:0}:{1:00}", minutes, seconds);
+        string format = string.Format("{0:0}:{1:00}", minutes, seconds);
 
-        OptionsTimeText.text = niceTime;
+        OptionsTimeText.text = format;
     }
 }
