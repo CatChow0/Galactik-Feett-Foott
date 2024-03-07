@@ -54,7 +54,7 @@ public class PlayerBehaviour : MonoBehaviour
     private Quaternion initialRotation;
     private Rigidbody rb;
     float hor, vert, currentSpeed;
-    bool slow, jump, jetpack, jumpAllow, dash, grappleHook;
+    bool slow, jump, jetpack, jumpAllow, dash, grappleHook, menu;
     private bool jetpackUsed = false;
     private bool newJetpackUsed = false;
     private bool jetpackCooldown = false;
@@ -70,11 +70,12 @@ public class PlayerBehaviour : MonoBehaviour
     RectTransform handleTransform = null;
     RectTransform handleFillTransform = null;
 
+    public GameObject mainMenu;
+
     private void Awake()
     {
         // Recuperation du rigidbody
         rb = GetComponent<Rigidbody>();
-        
     }
 
     // Start is called before the first frame update
@@ -101,6 +102,8 @@ public class PlayerBehaviour : MonoBehaviour
         GrappleManager();
 
         EnergySliderUpdate();
+
+        OpenMenu();
 
         // Debug
         Debug.DrawRay(transform.position, transform.forward * 20, Color.blue);
@@ -388,6 +391,7 @@ public class PlayerBehaviour : MonoBehaviour
             slow = Input.GetButton("Slow1");
             dash = Input.GetButtonDown("Dash1");
             grappleHook = Input.GetButtonDown("GrappleHook");
+            menu = Input.GetButtonDown("Menu");
         }
         else if (id == 2)
         {
@@ -398,6 +402,7 @@ public class PlayerBehaviour : MonoBehaviour
             slow = Input.GetButton("Slow2");
             dash = Input.GetButtonDown("Dash2");
             grappleHook = Input.GetButtonDown("GrappleHook1");
+            menu = Input.GetButtonDown("Menu");
         }
     }
 
@@ -509,4 +514,12 @@ public class PlayerBehaviour : MonoBehaviour
         transform.Rotate(transform.up, angularSpeed * hor);
     }
 
+    private void OpenMenu()
+    {
+        if (menu)
+        {
+            mainMenu.SetActive(true);
+            Time.timeScale = 0;
+        }
+    }
 }
