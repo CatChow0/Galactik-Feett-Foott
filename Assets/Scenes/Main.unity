@@ -2891,7 +2891,7 @@ MonoBehaviour:
   obstaclePrefabs:
   - {fileID: 3034206700791182989, guid: 082c5ad8359ad31438d14cd3933ddd7b, type: 3}
   terrain: {fileID: 1280706665}
-  numberOfObstacles: 5
+  numberOfObstacles: 20
   minDistance: 2
 --- !u!4 &1128746544 stripped
 Transform:

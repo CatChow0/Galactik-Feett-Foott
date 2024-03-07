@@ -19,13 +19,37 @@ public class ObstacleGenerator : MonoBehaviour
 
         foreach (Vector3 point in points)
         {
-            GameObject obstaclePrefab = obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)];
-            GameObject obstacle = Instantiate(obstaclePrefab, point, Quaternion.identity);
+            // Vérifie si un obstacle peut être placé à ce point
+            bool canPlaceObstacle = CanPlaceObstacleAtPoint(point);
+            if (canPlaceObstacle)
+            {
+                // Sélectionne un préfabriqué d'obstacle aléatoire
+                GameObject obstaclePrefab = obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)];
+                // Instancie l'obstacle à la position calculée
+                GameObject obstacle = Instantiate(obstaclePrefab, point, Quaternion.identity);
 
-            // Assurez-vous que l'obstacle est positionné au-dessus du terrain
-            Vector3 terrainPoint = new Vector3(point.x, terrain.SampleHeight(point) + obstacle.transform.localScale.y / 2f, point.z);
-            obstacle.transform.position = terrainPoint;
+                // Assurez-vous que l'obstacle est positionné au-dessus du terrain
+                Vector3 terrainPoint = new Vector3(point.x, terrain.SampleHeight(point) + obstacle.transform.localScale.y / 2f, point.z);
+                obstacle.transform.position = terrainPoint;
+            }
         }
+    }
+
+    bool CanPlaceObstacleAtPoint(Vector3 point)
+    {
+        // Recherche des collisions dans un rayon autour du point
+        Collider[] colliders = Physics.OverlapSphere(point, minDistance);
+        foreach (Collider collider in colliders)
+        {
+            // Vérifie si le collider n'appartient pas au terrain
+            if (collider.gameObject != terrain.gameObject)
+            {
+                // Si un collider autre que celui du terrain est trouvé, il y a déjà un objet à cet emplacement
+                return false;
+            }
+        }
+        // Si aucun collider autre que celui du terrain n'est trouvé, l'emplacement est valide pour placer un obstacle
+        return true;
     }
 
     List<Vector3> GenerateRandomPointsOnTerrain(int numberOfPoints)
@@ -35,6 +59,7 @@ public class ObstacleGenerator : MonoBehaviour
 
         for (int i = 0; i < numberOfPoints; i++)
         {
+            // Génère des coordonnées aléatoires à l'intérieur des limites du terrain
             float randomX = Random.Range(terrainBounds.min.x, terrainBounds.max.x);
             float randomZ = Random.Range(terrainBounds.min.z, terrainBounds.max.z);
             Vector3 randomPoint = new Vector3(randomX, 0f, randomZ); // Assurez-vous que la hauteur est ajustée plus tard
