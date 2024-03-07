@@ -17,9 +17,10 @@ public class GameManager : MonoBehaviour
     private Timer timerInstance;
 
     public GameObject EndGameMenu;
+    public GameObject scoredUi;
     public TextMeshProUGUI winnerText;
     public TextMeshProUGUI scoreText;
-    //public TextMeshProUGUI timeText;
+    public TextMeshProUGUI scoredText;
 
     public static GameManager GetInstance()
     {
@@ -91,20 +92,20 @@ public class GameManager : MonoBehaviour
         if (playerID == 1 && allowGoal)
         {
             scorePlayer2++;
-            Debug.Log("Player 2 scored : Player 1 | " + scorePlayer1 + " - " + scorePlayer2 + " | Player 2");
-
             allowGoal = false;
             GlobalUi.UpdateScore(playerID, scorePlayer2);
+            scoredText.text = "Player 2 scored";
+            scoredUi.SetActive(true);
 
             StartCoroutine(WaitGameRoutine());
         }
         else if (playerID == 2 && allowGoal)
         {
             scorePlayer1++;
-            Debug.Log("Player 1 scored : Player 1 | " + scorePlayer1 + " - " + scorePlayer2 + " | Player 2");
-
             allowGoal = false;
             GlobalUi.UpdateScore(playerID, scorePlayer1);
+            scoredText.text = "Player 1 scored";
+            scoredUi.SetActive(true);
 
             StartCoroutine(WaitGameRoutine());
         }
@@ -119,6 +120,7 @@ public class GameManager : MonoBehaviour
     IEnumerator WaitGameRoutine()
     {
         yield return new WaitForSecondsRealtime(5);
+        scoredUi.SetActive(false);
 
         SpawnPosition();
     }
