@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    private PlayerBehaviour player;
+
     public void PlayGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -14,6 +16,7 @@ public class MainMenu : MonoBehaviour
     public void ContinueGame()
     {
         Time.timeScale = 1;
+        player.isPaused = false;
     }
 
     public void BackToMainMenu()
@@ -30,7 +33,7 @@ public class MainMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        player = FindObjectOfType<PlayerBehaviour>();
     }
 
     // Update is called once per frame

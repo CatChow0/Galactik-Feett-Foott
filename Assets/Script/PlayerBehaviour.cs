@@ -71,6 +71,7 @@ public class PlayerBehaviour : MonoBehaviour
     RectTransform handleFillTransform = null;
 
     public GameObject mainMenu;
+    public bool isPaused = false;
 
     private void Awake()
     {
@@ -516,10 +517,11 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void OpenMenu()
     {
-        if (menu)
+        if (menu && !isPaused)
         {
             mainMenu.SetActive(true);
             Time.timeScale = 0;
+            isPaused = true;
         }
     }
 }

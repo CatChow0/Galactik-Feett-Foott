@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,11 @@ public class GameManager : MonoBehaviour
     private bool allowGoal;
     private bool restart = false;
     private Timer timerInstance;
+
+    public GameObject EndGameMenu;
+    public TextMeshProUGUI winnerText;
+    public TextMeshProUGUI scoreText;
+    //public TextMeshProUGUI timeText;
 
     public static GameManager GetInstance()
     {
@@ -76,11 +82,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        if (restart)
-        {
-            restart = false;
-            timerInstance.ResetTimer();
-        }
+        timerInstance.ResetTimer();
     }
 
 
@@ -122,37 +124,38 @@ public class GameManager : MonoBehaviour
         SpawnPosition();
     }
 
-    IEnumerator WaitGameRestart()
+    public void GameRestart()
     {
         SpawnPosition();
         ResetScore();
-
-        yield return new WaitForSecondsRealtime(5);
-
         RestartGame();
+        Time.timeScale = 1;
     }
 
     public void EndGame()
     {
         if (timerInstance.timeRemaining <= 0)
         {
+            Time.timeScale = 0;
+            EndGameMenu.SetActive(true);
             Debug.Log("Time's up");
 
             if (scorePlayer1 > scorePlayer2)
             {
                 Debug.Log("Player 1 wins");
+                winnerText.text = "Player 1 wins";
             }
             else if (scorePlayer1 < scorePlayer2)
             {
                 Debug.Log("Player 2 wins");
+                winnerText.text = "Player 2 wins";
             }
             else
             {
                 Debug.Log("Draw");
+                winnerText.text = "Draw";
             }
-
-            restart = true;
-            StartCoroutine(WaitGameRestart());
+            scoreText.text = scorePlayer1 + " - " + scorePlayer2;
         }
     }
 }

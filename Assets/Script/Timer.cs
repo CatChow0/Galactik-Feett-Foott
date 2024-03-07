@@ -35,6 +35,7 @@ public class Timer : MonoBehaviour
     {
         //defaultTime = instance.timeRemaining;
         LoadTimeRemaining();
+        defaultTime = timeRemaining;
     }
 
     // Update is called once per frame
