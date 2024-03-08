@@ -5,10 +5,17 @@ using UnityEngine;
 public class DroneProjectileBehaviour : MonoBehaviour
 {
 
-    public Ball ball; // La balle que le projectile va suivre
+    // --------------------------------------------- //
+    // ----------------- VARIABLES ----------------- //
+    // --------------------------------------------- //
 
+    public Ball ball;       // La balle que le projectile va suivre 
     private Rigidbody rb;
     private float speed;
+
+    // --------------------------------------------------------- //
+    // ----------------- FONCTIONS PRINCIPALES ----------------- //
+    // --------------------------------------------------------- //
 
     private void Start()
     {
@@ -23,7 +30,9 @@ public class DroneProjectileBehaviour : MonoBehaviour
         rb.velocity = direction * speed;
     }
 
-    //On collision with ball destroy self and push the ball
+    // ---------------------------------------------------- //
+    // -------------- GESTION DES COLLISIONS -------------- //
+    // ---------------------------------------------------- //
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.CompareTag("Ball"))

@@ -7,6 +7,10 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    // --------------------------------------------- //
+    // ----------------- VARIABLES ----------------- //
+    // --------------------------------------------- //
+
     public static GameManager instance;
 
     public int scorePlayer1, scorePlayer2;
@@ -22,6 +26,10 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI scoredText;
 
+    // ---------------------------------------------- //
+    // --------- RECUPERATION DE L'INSTANCE --------- //
+    // ---------------------------------------------- //
+
     public static GameManager GetInstance()
     {
         if (instance)
@@ -34,20 +42,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
+    // -------------------------------------------------------- //
+    // ----------------- FONCTIONS PRINCIPALE ----------------- //
+    // -------------------------------------------------------- //
     void Start()
     {
         timerInstance = Timer.GetInstance();
         SpawnPosition();
     }
 
-    // Update is called once per frame
     void Update()
     {
         EndGame();
     }
 
-    // Met les joueurs et la balle à leur position de départ
+    // ----------------------------------------------------- //
+    // -------------- POSITION DE DEPART DU JEU ------------ //
+    // ----------------------------------------------------- //
     void SpawnPosition()
     {
 
@@ -80,20 +91,24 @@ public class GameManager : MonoBehaviour
         player2.GetComponent<PlayerBehaviour>().energyAmount = player2.GetComponent<PlayerBehaviour>().defaultEnergy;
     }
 
+    // -------------------------------------------- //
+    // -------------- RESTART DU TIMER ------------ //
+    // -------------------------------------------- //
     public void RestartGame()
     {
         timerInstance.ResetTimer();
     }
 
 
-    // Update le score en cas de but
+    // ------------------------------------------ //
+    // -------------- POINT MARQUE -------------- //
+    // ------------------------------------------ //
     public void ScorePoint(int playerID)
     {
         if (playerID == 1 && allowGoal)
         {
             scorePlayer2++;
             allowGoal = false;
-            GlobalUi.UpdateScore(playerID, scorePlayer2);
             scoredText.text = "Player 2 scored";
             scoredUi.SetActive(true);
 
@@ -103,7 +118,6 @@ public class GameManager : MonoBehaviour
         {
             scorePlayer1++;
             allowGoal = false;
-            GlobalUi.UpdateScore(playerID, scorePlayer1);
             scoredText.text = "Player 1 scored";
             scoredUi.SetActive(true);
 
@@ -111,6 +125,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // -------------------------------------------- //
+    // -------------- RESET DU SCORE -------------- //
+    // -------------------------------------------- //
     public void ResetScore()
     {
         scorePlayer1 = 0;
@@ -124,7 +141,9 @@ public class GameManager : MonoBehaviour
 
         SpawnPosition();
     }
-
+    // -------------------------------------------- //
+    // -------------- RESTART DU JEU -------------- //
+    // -------------------------------------------- //
     public void GameRestart()
     {
         SpawnPosition();
@@ -133,27 +152,26 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    // ---------------------------------------- //
+    // -------------- FIN DU JEU -------------- //
+    // ---------------------------------------- //
     public void EndGame()
     {
         if (timerInstance.timeRemaining <= 0)
         {
             Time.timeScale = 0;
             EndGameMenu.SetActive(true);
-            Debug.Log("Time's up");
 
             if (scorePlayer1 > scorePlayer2)
             {
-                Debug.Log("Player 1 wins");
                 winnerText.text = "Player 1 wins";
             }
             else if (scorePlayer1 < scorePlayer2)
             {
-                Debug.Log("Player 2 wins");
                 winnerText.text = "Player 2 wins";
             }
             else
             {
-                Debug.Log("Draw");
                 winnerText.text = "Draw";
             }
             scoreText.text = scorePlayer1 + " - " + scorePlayer2;

@@ -5,9 +5,15 @@ using UnityEngine.SocialPlatforms.Impl;
 using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
 
 public class PlayerBehaviour : MonoBehaviour
 {
+
+    // --------------------------------------------- //
+    // ----------------- VARIABLES ----------------- //
+    // --------------------------------------------- //
+
     [Header("Player Settings")]
     // Initialisation des variables changeables dans l'editeur
     [SerializeField] private float moveSpeed;
@@ -73,13 +79,15 @@ public class PlayerBehaviour : MonoBehaviour
     public GameObject mainMenu;
     public bool isPaused = false;
 
+    // ------------------------------------------------------- //
+    // ----------------- FONCTION PRINCIPALE ----------------- //
+    // ------------------------------------------------------- //
+
     private void Awake()
     {
-        // Recuperation du rigidbody
         rb = GetComponent<Rigidbody>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(RegenEnergy());
@@ -87,7 +95,6 @@ public class PlayerBehaviour : MonoBehaviour
         defaultEnergy = energyAmount;
     }
 
-    // Update is called once per frame
     void Update()
     {
         InputManager();
@@ -106,9 +113,6 @@ public class PlayerBehaviour : MonoBehaviour
 
         OpenMenu();
 
-        // Debug
-        Debug.DrawRay(transform.position, transform.forward * 20, Color.blue);
-        Debug.DrawRay(transform.position, Vector3.forward * 20, Color.cyan);
     }
 
     private void FixedUpdate()
@@ -118,6 +122,9 @@ public class PlayerBehaviour : MonoBehaviour
         GrapplingManager();
     }
 
+    // ------------------------------------------------------ //
+    // ---------- GESTION DES COLLISIONS DU JOUEUR ---------- //
+    // ------------------------------------------------------ //
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -134,7 +141,7 @@ public class PlayerBehaviour : MonoBehaviour
         {
             isGrappling = false;
 
-            // Ajoute une force � la balle dans la direction du mouvement du joueur
+            // Ajoute une force a la balle dans la direction du mouvement du joueur
             Rigidbody ballRigidbody = targetBall.GetComponent<Rigidbody>();
             Vector3 pushDirection = (targetBall.transform.position - transform.position).normalized;
             ballRigidbody.AddForce(pushDirection * grappleSpeed, ForceMode.Impulse);
@@ -163,9 +170,14 @@ public class PlayerBehaviour : MonoBehaviour
         jumpAllow = false;
     }
 
-    // Gestion du jetpack
+    // ------------------------------------------------------ //
+    // --------------- GESTION DU JETPACK  ------------------ //
+    // ------------------------------------------------------ //
     private void JetpackManager()
     {
+
+        // Verifie si le joueur a assez d'energie pour utiliser le jetpack //
+
         if (jetpack && energyAmount >= jetpackEnergy)
         {
             if (!jetpackUsed && energyAmount >= (jetpackMinEnergy * 2))
@@ -178,7 +190,7 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 newJetpackUsed = true;
             }
-            rb.AddForce(transform.up * jetpackForce);
+            rb.AddForce(transform.up * jetpackForce * 100 * Time.deltaTime);
             energyAmount -= jetpackEnergy * Time.deltaTime * jetpackMultiplier;
         }
         else
@@ -191,12 +203,16 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
-    // Gestion du dash
+    // --------------------------------------------------- //
+    // --------------- GESTION DU DASH  ------------------ //
+    // --------------------------------------------------- //
     private void DashManager()
     {
+
+        // Verifie si le joueur a assez d'energie pour dash //
+
         if (dash && energyAmount >= dashEnergy)
         {
-            //Debug.Log("Dash");
             if (dashUsed)
             {
                 newDashUsed = true;
@@ -205,17 +221,18 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 dashUsed = true;
             }
-            // Recupere la direction du joueur et ajoute une force dans cette direction pour le dash et utilise une coroutine pour le temps de dash et un lerp pour la vitesse
-            Vector3 dashDirection = transform.forward;
-            rb.AddForce(dashDirection * dashForce, ForceMode.Impulse);
-            // set la fov de la camera a 120 en utilisant un lerp
-            StartCoroutine(DashTime());
-            energyAmount -= dashEnergy;
-            DoFov(dashFov);
+
+            Vector3 dashDirection = transform.forward;                                           // Direction du dash
+            rb.AddForce(dashDirection * dashForce*100 * Time.deltaTime, ForceMode.Impulse);      // Ajoute une force au joueur dans la direction du dash
+            StartCoroutine(DashTime());                                                          // Lance le Cooldown du dash
+            energyAmount -= dashEnergy;                                                          // Retire l'energie utilisee pour le dash
+            DoFov(dashFov);                                                                      // Change la fov de la camera
         }
     }
 
-    // Coroutine pour le temps de dash
+    // -------------------------------------------------- //
+    // ------------ DUREE DU DASH ET FOV  --------------- //
+    // -------------------------------------------------- //
     private IEnumerator DashTime()
     {
         // Attend le temps de dash et remet la vitesse du joueur a la normale
@@ -224,56 +241,60 @@ public class PlayerBehaviour : MonoBehaviour
         DoFov(fov);
     }
 
-    // Change la fov de la camera
     private void DoFov(float end_value)
     {
-        // Clean fov
 
-        //cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, end_value, 0.5f);
+        //cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, end_value, 0.5f); // Change la fov de la camera SANS DoTween
 
-        cam.DOFieldOfView(end_value, 0.15f);
+        cam.DOFieldOfView(end_value, 0.15f);                              // Change la fov de la camera AVEC DoTween 
     }
 
-    // Gestion du cooldown du dash et du jetpack
+    // ------------------------------------------------------ //
+    // ------------ COOLDOWN DU DASH ET JETPACK  ------------ //
+    // ------------------------------------------------------ //
     private void MovementCooldown()
     {
         if (start)
         {
-            if (restart)
+            if (restart)                                            // Si le joueur a utilise un autre mouvement pendant le cooldown
             {
                 restart = false;
                 CooldownRemainingTime = 0;
                 newDashUsed = false;
                 newJetpackUsed = false;
                 grappleUsed = false;
-                //Debug.Log("Restart Countdown");
             }
-            if (CooldownRemainingTime >= energyRegenCooldown)
+            if (CooldownRemainingTime >= energyRegenCooldown)       // Si le cooldown est termine
             {
                 jetpackCooldown = false;
                 dashUsed = false;
                 grappleUsed = false;
                 start = false;
             }
-            else if (CooldownRemainingTime < energyRegenCooldown)
+            else if (CooldownRemainingTime < energyRegenCooldown)   // Si le cooldown n'est pas termine
             {
                 CooldownRemainingTime += Time.deltaTime;
-                //Debug.Log("Countdown Start");
             }
         }
-        else if (!start)
+        else if (!start)                                           // Si le joueur n'a pas utilise de mouvement pendant le cooldown
         {
             CooldownRemainingTime = 0;
             start = false;
         }
     }
 
-    // Coroutine pour la regen d'energie
+    // ------------------------------------------------------ //
+    // ------------ REGENERATION DE L'ENERGIE  -------------- //
+    // ------------------------------------------------------ //
     private IEnumerator RegenEnergy()
     {
         while (true)
         {
-            // Si l'energie n'est pas a son maximum et que le jetpack n'est pas utilise ou que l'energie est inferieure a la limite minimale pour le jetpack, et que le cooldown du jetpack est termine
+            // Si l'energie n'est pas a son maximum et que le jetpack 
+            // n'est pas utilise ou que l'energie est inferieure a la
+            // limite minimale pour le jetpack, et que le cooldown du
+            // jetpack est termine
+
             if (energyAmount < maxEnergyAmount && ((!jetpack || energyAmount < jetpackMinEnergy * 2) && !jetpackCooldown && !newJetpackUsed) && !dashUsed && !grappleUsed)
             {
                 float regenAmount = energyRegenCurve.Evaluate(energyAmount / maxEnergyAmount);
@@ -309,16 +330,13 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
-    // Recupere l'id
-    public int GetID()
-    {
-        return id;
-    }
-
-    // Recupere le slider de l'energie
+    // ------------------------------------------------------ //
+    // ------------ RECUPERATION DU SLIDER D'ENERGIE  ------- //
+    // ------------------------------------------------------ //
     private void RetrieveEnergySlider()
     {
-        Transform handleFile = transform.Find("Canvas/Slider/Handle Slide Area/Handle");
+
+        Transform handleFile = transform.Find("Canvas/Slider/Handle Slide Area/Handle");    // Recupere les elements du slider d'energie
         Transform handleTransformFile = transform.Find("Canvas/Slider/Handle Slide Area");
         Transform handleFillTransformFile = transform.Find("Canvas/Slider/Fill Area");
         Transform handleFillFile = transform.Find("Canvas/Slider/Fill Area/Fill");
@@ -327,50 +345,34 @@ public class PlayerBehaviour : MonoBehaviour
         {
             handleTransform = handleTransformFile.GetComponent<RectTransform>();
         }
-        else if (handleTransform == null)
-        {
-            Debug.LogError("Handle Transform not found");
-        }
 
         if (handleFile != null)
         {
-            //Debug.Log("Handle image found");
             handleImage = handleFile.GetComponent<Image>();
-        }
-        else if (handleImage == null)
-        {
-            Debug.LogError("Handle image not found");
         }
 
         if (handleFillTransformFile != null)
         {
-            //Debug.Log("Fill Area found");
             handleFillTransform = handleFile.GetComponent<RectTransform>();
-        }
-        else if (handleFillTransform == null)
-        {
-            Debug.LogError("Handle Fill Transform not found");
         }
 
         if (handleFillTransform != null)
         {
-            //Debug.Log("Fill image found");
             handleFill = handleFillFile.GetComponent<Image>();
         }
-        else if (handleFill == null)
-        {
-            Debug.LogError("Handle Fill not found");
-        }
+
     }
 
-    // Met a jour le slider de l'energie
+    // ------------------------------------------------------ //
+    // ------------ MISE A JOUR DU SLIDER D'ENERGIE  -------- //
+    // ------------------------------------------------------ //
     private void EnergySliderUpdate()
     {
+
         if (handleTransform != null && handleImage != null)
         {
             float handlePosition = (energyAmount / maxEnergyAmount) * handleTransform.rect.height;
             handleImage.rectTransform.anchoredPosition = new Vector2(handleImage.rectTransform.anchoredPosition.x, -handlePosition);
-            //Debug.Log("Handle position : " + handlePosition);
 
             float fillAmount = handlePosition + 10;
             float fillPosition = handlePosition / 2;
@@ -379,7 +381,9 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
-    // Gere les inputs du joueur
+    // ------------------------------------------------------ //
+    // ------------ RECUPERATION DES INPUTS  ---------------- //
+    // ------------------------------------------------------ //
     private void InputManager()
     {
         //Check id
@@ -407,29 +411,36 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
-    // Gestion du saut
+    // ----------------------------------------------------- //
+    // ------------- GESTION DU SAUT DU JOUEUR ------------- //
+    // ----------------------------------------------------- //
+
     private void JumpManager()
     {
         if (jump && jumpAllow)
         {
-            rb.AddForce(transform.up * jumpForce);
+            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
     }
 
-    // Gestion du grappin
+    // ------------------------------------------------ //
+    // ------------ GESTION DU GRAPPIN  --------------- //
+    // ------------------------------------------------ //
+
     private void GrappleManager()
     {
         if (grappleHook)
         {
-            // si le joueur est en train de grapple
+
+            // si le joueur est en train de grapple //
             if (isGrappling)
             {
                 isGrappling = false;
             }
-            // Verifie si la balle est a portee
+
+            // Verifie si la balle est a portee //
             else if ((Vector3.Distance(transform.position, targetBall.transform.position) >= grappleMinRange) && energyAmount >= maxEnergyAmount)
             {
-                // Grapple
                 isGrappling = true;
                 initialRotation = transform.rotation;
                 energyAmount -= maxEnergyAmount;
@@ -439,9 +450,8 @@ public class PlayerBehaviour : MonoBehaviour
 
         if (isGrappling)
         {
-            // Fait pivoter le joueur vers la balle de maniere douce
-            Quaternion targetRotation = Quaternion.LookRotation(targetBall.transform.position - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * grappleSpeed * 0.1f); // r�duit la vitesse de rotation du joueur
+            Quaternion targetRotation = Quaternion.LookRotation(targetBall.transform.position - transform.position);            // Fait pivoter le joueur vers la balle de maniere douce
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * grappleSpeed * 0.1f);    // reduit la vitesse de rotation du joueur
 
             grappleObject.SetActive(true);
 
@@ -468,17 +478,21 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
-    // Gestion lors du grappin
+    // ------------------------------------------------------ //
+    // ------------ GESTION DU GRAPPIN DU JOUEUR ------------ //
+    // ------------------------------------------------------ //
     private void GrapplingManager()
     {
         if (isGrappling)
         {
-            float step = grappleSpeed * Time.deltaTime;
+            float step = grappleSpeed * Time.fixedDeltaTime;
             transform.position = Vector3.MoveTowards(transform.position, targetBall.transform.position, step);
         }
     }
 
-    // Gestion du deplacement
+    // ------------------------------------------------------- //
+    // ------------ GESTION DU MOUVEMENT DU JOUEUR ----------- //
+    // ------------------------------------------------------- //
     private void MovementManager()
     {
         // Deplacement du joueur en marchant/slow
@@ -510,10 +524,14 @@ public class PlayerBehaviour : MonoBehaviour
                 currentSpeed = -maxSpeed;
             }
         }
-        rb.AddForce(transform.forward * currentSpeed);
+        rb.AddForce(transform.forward * currentSpeed*50 * Time.fixedDeltaTime) ;
         // Rotation du joueur
-        transform.Rotate(transform.up, angularSpeed * hor);
+        transform.Rotate(transform.up, angularSpeed*200 * hor * Time.fixedDeltaTime);
     }
+
+    // ------------------------------------------------------ //
+    // ------------ OUVERTURE DU MENU DE PAUSE  ------------- //
+    // ------------------------------------------------------ //
 
     private void OpenMenu()
     {

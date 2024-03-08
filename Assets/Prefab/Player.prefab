@@ -259,7 +259,7 @@ Rigidbody:
   m_GameObject: {fileID: 7721783544866018370}
   serializedVersion: 4
   m_Mass: 8.5
-  m_Drag: 0.15
+  m_Drag: 0.3
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -321,6 +321,8 @@ MonoBehaviour:
   grappleObject: {fileID: 8837726342466576605}
   CooldownRemainingTime: 0
   defaultEnergy: 0
+  mainMenu: {fileID: 0}
+  isPaused: 0
 --- !u!1 &7769041637490491263
 GameObject:
   m_ObjectHideFlags: 0

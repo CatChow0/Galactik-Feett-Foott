@@ -3,11 +3,18 @@ using UnityEngine;
 
 public class ObstacleGenerator : MonoBehaviour
 {
-    public GameObject[] obstaclePrefabs; // Tableau des préfabriqués des obstacles
-    public Terrain terrain; // Référence au terrain
-    public int numberOfObstacles = 10; // Nombre d'obstacles à générer
-    public float minDistance = 2f; // Distance minimale entre les obstacles
+    // --------------------------------------------- //
+    // ----------------- VARIABLES ----------------- //
+    // --------------------------------------------- //
 
+    public GameObject[] obstaclePrefabs;    // Tableau des préfabriqués des obstacles
+    public Terrain terrain;                 // Référence au terrain
+    public int numberOfObstacles = 10;      // Nombre d'obstacles à générer
+    public float minDistance = 2f;          // Distance minimale entre les obstacles
+
+    // ------------------------------------------------------- //
+    // ----------------- FONCTION PRINCIPALE ----------------- //
+    // ------------------------------------------------------- //
     void Start()
     {
         GenerateObstacles();
